@@ -1,0 +1,164 @@
+localCount 7856026 with processId: 1 
+localCount 7854877 with processId: 0 
+totalCount: 15710903 
+the estimate of pi using 20000000 points: 3.142181 
+***time consumed with 2 processes is 0.210280 seconds
+
+
+localCount 3929051 with processId: 2 
+localCount 3927926 with processId: 1 
+localCount 3928689 with processId: 3 
+localCount 3928329 with processId: 0 
+totalCount: 15713995 
+the estimate of pi using 20000000 points: 3.142799 
+***time consumed with 4 processes is 0.173867 seconds
+
+
+localCount 1963424 with processId: 6 
+localCount 1964211 with processId: 3 
+localCount 1963491 with processId: 1 
+localCount 1963451 with processId: 2 
+localCount 1963088 with processId: 4 
+localCount 1963313 with processId: 7 
+localCount 1964196 with processId: 5 
+localCount 1962656 with processId: 0 
+totalCount: 15707830 
+the estimate of pi using 20000000 points: 3.141566 
+***time consumed with 8 processes is 0.120137 seconds
+
+
+localCount 1571281 with processId: 9 
+localCount 1570692 with processId: 4 
+localCount 1571229 with processId: 5 
+localCount 1571025 with processId: 8 
+localCount 1570718 with processId: 6 
+localCount 1570965 with processId: 2 
+localCount 1570406 with processId: 1 
+localCount 1570562 with processId: 7 
+localCount 1571205 with processId: 3 
+localCount 1570007 with processId: 0 
+totalCount: 15708090 
+the estimate of pi using 20000000 points: 3.141618 
+***time consumed with 10 processes is 0.160196 seconds
+
+
+localCount 1046545 with processId: 11 
+localCount 1047050 with processId: 1 
+localCount 1046908 with processId: 5 
+localCount 1047252 with processId: 14 
+localCount 1047353 with processId: 2 
+localCount 1047364 with processId: 4 
+localCount 1047447 with processId: 9 
+localCount 1046697 with processId: 12 
+localCount 1046403 with processId: 13 
+localCount 1047168 with processId: 10 
+localCount 1047380 with processId: 6 
+localCount 1047250 with processId: 7 
+localCount 1047467 with processId: 3 
+localCount 1047318 with processId: 8 
+localCount 1046554 with processId: 0 
+totalCount: 15706156 
+the estimate of pi using 19999995 points: 3.141232 
+***time consumed with 15 processes is 0.171006 seconds
+
+
+localCount 785652 with processId: 2 
+localCount 785789 with processId: 6 
+localCount 785394 with processId: 1 
+localCount 785284 with processId: 10 
+localCount 785352 with processId: 5 
+localCount 785377 with processId: 18 
+localCount 785404 with processId: 8 
+localCount 784574 with processId: 3 
+localCount 785269 with processId: 19 
+localCount 785280 with processId: 13 
+localCount 785893 with processId: 17 
+localCount 785302 with processId: 4 
+localCount 785443 with processId: 14 
+localCount 785218 with processId: 11 
+localCount 785487 with processId: 9 
+localCount 785054 with processId: 12 
+localCount 785221 with processId: 7 
+localCount 785889 with processId: 16 
+localCount 785457 with processId: 15 
+localCount 784858 with processId: 0 
+totalCount: 15707197 
+the estimate of pi using 20000000 points: 3.141439 
+***time consumed with 20 processes is 0.238292 seconds
+
+
+localCount 628589 with processId: 20 
+localCount 627481 with processId: 24 
+localCount 627513 with processId: 3 
+localCount 628196 with processId: 2 
+localCount 628761 with processId: 17 
+localCount 628248 with processId: 8 
+localCount 628740 with processId: 16 
+localCount 628696 with processId: 22 
+localCount 628170 with processId: 7 
+localCount 628220 with processId: 1 
+localCount 628377 with processId: 18 
+localCount 627984 with processId: 12 
+localCount 628116 with processId: 19 
+localCount 628268 with processId: 21 
+localCount 628445 with processId: 14 
+localCount 628160 with processId: 4 
+localCount 628272 with processId: 13 
+localCount 628407 with processId: 5 
+localCount 628260 with processId: 10 
+localCount 628140 with processId: 9 
+localCount 628546 with processId: 6 
+localCount 628274 with processId: 23 
+localCount 628346 with processId: 15 
+localCount 628146 with processId: 11 
+localCount 627940 with processId: 0 
+totalCount: 15706295 
+the estimate of pi using 20000000 points: 3.141259 
+***time consumed with 25 processes is 0.194480 seconds
+
+
+localCount 392239 with processId: 9 
+localCount 392385 with processId: 37 
+localCount 392598 with processId: 18 
+localCount 392291 with processId: 32 
+localCount 392741 with processId: 27 
+localCount 392931 with processId: 17 
+localCount 393197 with processId: 34 
+localCount 392625 with processId: 19 
+localCount 392853 with processId: 11 
+localCount 392763 with processId: 8 
+localCount 393183 with processId: 33 
+localCount 392887 with processId: 16 
+localCount 392569 with processId: 1 
+localCount 392929 with processId: 35 
+localCount 392780 with processId: 38 
+localCount 392892 with processId: 2 
+localCount 392866 with processId: 5 
+localCount 393043 with processId: 13 
+localCount 392143 with processId: 20 
+localCount 393131 with processId: 12 
+localCount 392905 with processId: 4 
+localCount 392908 with processId: 10 
+localCount 392730 with processId: 28 
+localCount 393043 with processId: 14 
+localCount 393173 with processId: 3 
+localCount 392777 with processId: 6 
+localCount 392622 with processId: 7 
+localCount 392995 with processId: 15 
+localCount 392486 with processId: 30 
+localCount 392635 with processId: 21 
+localCount 392931 with processId: 26 
+localCount 392294 with processId: 29 
+localCount 392230 with processId: 22 
+localCount 393212 with processId: 36 
+localCount 392704 with processId: 24 
+localCount 392939 with processId: 25 
+localCount 392961 with processId: 39 
+localCount 392801 with processId: 31 
+localCount 392577 with processId: 23 
+localCount 392618 with processId: 0 
+totalCount: 15710587 
+the estimate of pi using 20000000 points: 3.142117 
+***time consumed with 40 processes is 0.307994 seconds
+
+
