@@ -156,39 +156,95 @@ int main(int argc, char* argv[])
 
         //we need to q step to finish the calculation, which q is how many process we have on each row, and also it is how many process we have on each column.
         //now for each of the process, do the regular matrix multiplication
+        MPI_Barrier(MPI_COMM_WORLD);
         int transferStep;
+       
+        
         for(transferStep=0;transferStep<q;transferStep++)
         {
           
             //BroadCast M and keep N as what it is. I think for N we don't need a localTempNForIt, it should record all the data by itself
-              if(myIdInRowGroup==((mypid/blockSize)+transferStep)%q)
+              if(myIdInRowGroup==((mypid/q)+transferStep)%q)
               {
-               MPI_Bcast(localSubmatrixM,blockSize*blockSize,MPI_DOUBLE,myIdInRowGroup,my_row_comm);
+                localTempM=localSubmatrixM;
+               MPI_Bcast(localTempM,blockSize*blockSize,MPI_DOUBLE,myIdInRowGroup,my_row_comm);
                
               }
                else
                {
-                MPI_Bcast(localTempM,blockSize*blockSize,MPI_DOUBLE,((mypid/blockSize)+transferStep)%q,my_row_comm);
+                MPI_Bcast(localTempM,blockSize*blockSize,MPI_DOUBLE,((mypid/q)+transferStep)%q,my_row_comm);
                }
+         /*   if(mypid/q==1)
+            {
+                printf("this is the local temp pid %d in step %d: \n",mypid,transferStep);
+                for(i=0;i<blockSize*blockSize;i++)
+                {
+                    printf(" %lf ",localTempM[i]);
+                }
+                printf("\n");
+            }*/
+        /*    if(mypid/q==0)
+            {
+                printf("this is the local temp pid %d in step %d: \n",mypid,transferStep);
+                for(i=0;i<blockSize*blockSize;i++)
+                {
+                    printf(" %lf ",localSubmatrixN[i]);
+                }
+                printf("\n");
 
+            }*/
 
            //now make serialize multiplication
-          for(i=0;i<blockSize;i++)
+      /*     for(i=0;i<blockSize;i++)
               {
                 
                 for(j=0;j<blockSize;j++)
-                {
+                {*/
                     //so need the ith row of subA and jth col of subB multiply together
-                    for(k=0;k<blockSize;k++)
-                    {
+                  for(i=0;i<blockSize*blockSize;i++)
+                  {
+                    
                         for(l=0;l<blockSize;l++)
                         {
                             //this step is very delicate.
-                          subResult[i][j]=subResult[i][j]+localTempM[k*blockSize+l]*localSubmatrixN[l*blockSize+k];
+                  
+                         subResult[i/q][i%q] =subResult[i/q][i%q]+localTempM[(i/q)*blockSize+l]*localSubmatrixN[l*blockSize+(i%q)];
+                         /* printf(" %lf \n",subResult[i/q][i%q]);*/
                         }
-                    }
-                }
-              }
+                    
+                    
+                  }
+             
+            /*    }
+              }*/
+              
+
+
+        if(mypid==0)
+        {
+            printf("Here is the result: \n");
+        for(i=0;i<blockSize;i++)
+        {
+            for(j=0;j<blockSize;j++)
+            {
+               printf(" %lf ",subResult[i][j]);
+            }
+            printf("\n");
+        }
+        }
+
+    /*             if(mypid==0)
+        {
+            printf("Here is the result: \n");
+        for(i=0;i<blockSize;i++)
+        {
+            for(j=0;j<blockSize;j++)
+            {
+               printf(" %lf ",subResult[i][j]);
+            }
+            printf("\n");
+        }
+        }*/
             //for matrix N we can use BroadCasting, we have to use send receive, since now the all the process in the same column get the same data
             if(myIdInColGroup!=0)
             {
@@ -208,9 +264,13 @@ int main(int argc, char* argv[])
             {
                 MPI_Recv(localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,0,0,my_col_comm,MPI_STATUS_IGNORE);
             }
+ 
+           MPI_Barrier(MPI_COMM_WORLD);
         }
         //ok now, after all the multiplication, we should print out the local result
-        if(mypid==0)
+        MPI_Barrier(MPI_COMM_WORLD);
+
+       /* if(mypid==0)
         {
             printf("Here is the result: \n");
         for(i=0;i<blockSize;i++)
@@ -221,7 +281,7 @@ int main(int argc, char* argv[])
             }
             printf("\n");
         }
-        }
+        }*/
 
     	
  /*   	if(myIdInRowGroup==0)
