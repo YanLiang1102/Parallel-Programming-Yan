@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
     int i,j,k,l;
   int my_row,my_col;
   int myIdInRowGroup, myIdInColGroup;
-    int rows=16;
-    int cols=16;
+    int rows=pow(2,7);
+    int cols=pow(2,7);
     int blockSize; //this will store the size of each submatrix that is on each process
     double *localSubmatrixM;
     double *localSubmatrixN;
@@ -32,8 +32,10 @@ int main(int argc, char* argv[])
     double **subResult;
     double **M;
     double **N;
+    double **R;
     double *bigArrayForM;
     double *bigArrayForN;
+    double sstart,sfinish,pstart,pfinish;//store serialized multiplication and parallel multiplication time
     
   //printf("this is my q: %d",q);
   MPI_Comm my_row_comm;
@@ -99,19 +101,56 @@ int main(int argc, char* argv[])
                  for(j=0;j<cols;j++)
                  {
                     N[i][j]=r1()+r2();
-                    printf(" N%lf ",N[i][j]);
+                    //printf(" N%lf ",N[i][j]);
                  }
-                 printf("\n"); 
+                 //printf("\n"); 
              }
               for(i=0;i<rows;i++){
                  for(j=0;j<cols;j++)
                  {
                     M[i][j]=r1()+r2();
-                    printf(" M%lf ",M[i][j]);
+                    //printf(" M%lf ",M[i][j]);
 
                  }
-                  printf("\n"); 
+                  //printf("\n"); 
              }
+            //this only allocate on first process to test the time of the serialized multiplication
+            R=(double **) malloc(rows*sizeof(double *));
+            for(i=0;i<rows;i++)
+            {
+                R[i]=(double *) malloc(cols*sizeof(double));
+            }
+             for(i=0;i<rows;i++){
+                 for(j=0;j<cols;j++)
+                 {
+                    R[i][j]=0.0;
+
+                 }
+             }
+             sstart=MPI_Wtime();
+              for(i=0;i<rows;i++)
+              {
+                for(j=0;j<cols;j++)
+                {
+                  for(k=0;k<cols;k++) //here can be cols or rows it does not matter ,since teh matrix is a square here
+                  {
+                    R[i][j]=R[i][j]+M[i][k]*N[k][j];
+                    
+                  }
+                  //printf(" %lf ",R[i][j]);
+                }
+                //printf("\n");
+              }
+              sfinish=MPI_Wtime();
+              //after caculate the serilized version free the memory,but still need to keep it there for testing.
+          /*     for(i=0;i<rows;i++)
+            {
+                free(R[i]);
+            }
+            free(R);*/
+            //free the memory
+
+              printf("time took for serialized multiplication of size %d * %d matrix is: %lf \n",rows,cols,sfinish-sstart);
              //this will put M,N in contiguous manner, so we can send them off to other process using MPI_Scatter, this part is pretty tricky but beautiful.
             for(step=0;step<q*q;step++)
             {
@@ -158,7 +197,9 @@ int main(int argc, char* argv[])
         //now for each of the process, do the regular matrix multiplication
         MPI_Barrier(MPI_COMM_WORLD);
         int transferStep;
-       
+         
+        
+         pstart=MPI_Wtime();
         
         for(transferStep=0;transferStep<q;transferStep++)
         {
@@ -269,10 +310,11 @@ int main(int argc, char* argv[])
         }
         //ok now, after all the multiplication, we should print out the local result
         MPI_Barrier(MPI_COMM_WORLD);
+        pfinish=MPI_Wtime();
 
         if(mypid==0)
         {
-            printf("Here is the result: \n");
+           /* printf("Here is the result: \n");
         for(i=0;i<blockSize;i++)
         {
             for(j=0;j<blockSize;j++)
@@ -280,8 +322,27 @@ int main(int argc, char* argv[])
                printf(" %lf ",subResult[i][j]);
             }
             printf("\n");
+        }*/
+            printf("time took for parallel multiplication of size %d * %d matrix with %d processes is : %lf \n",rows,cols,mysize,pfinish-pstart);
+            for(i=0;i<blockSize;i++)
+            {
+              for(j=0;j<blockSize;j++)
+              {
+                if(R[i][j]-subResult[i][j]>=0.1)
+                {
+                  printf("the value not match on row %d, column %d \n",i,j);
+                }
+              }
+            }
+
+            printf("if there is no sentence like the value not match printed here, it means our parallel result is correct!! \n");
+          
+             
+
         }
-        }
+
+        //only test the first block in process 0 and I think it should be good enough to see if we did in a good way.
+
 
       
  /*     if(myIdInRowGroup==0)
