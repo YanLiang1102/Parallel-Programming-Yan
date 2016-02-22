@@ -12,22 +12,22 @@ double r2();
 
 int main(int argc, char* argv[])
 {
-	int q; //q*q will be all the process we have
-	int mypid,mysize;
+  int q; //q*q will be all the process we have
+  int mypid,mysize;
     int i,j,k,l;
-	int my_row,my_col;
-	int myIdInRowGroup, myIdInColGroup;
-    int rows=4;
-    int cols=4;
+  int my_row,my_col;
+  int myIdInRowGroup, myIdInColGroup;
+    int rows=16;
+    int cols=16;
     int blockSize; //this will store the size of each submatrix that is on each process
     double *localSubmatrixM;
     double *localSubmatrixN;
     double *localTempM;
     double *localTempN;
-	MPI_Init(&argc,&argv);
-	MPI_Comm_size(MPI_COMM_WORLD,&mysize);
-	MPI_Comm_rank(MPI_COMM_WORLD,&mypid);
-	q=(int)sqrt(mysize);
+  MPI_Init(&argc,&argv);
+  MPI_Comm_size(MPI_COMM_WORLD,&mysize);
+  MPI_Comm_rank(MPI_COMM_WORLD,&mypid);
+  q=(int)sqrt(mysize);
     //this will will be submatrix on each process that store the Result.
     double **subResult;
     double **M;
@@ -35,9 +35,9 @@ int main(int argc, char* argv[])
     double *bigArrayForM;
     double *bigArrayForN;
     
-	//printf("this is my q: %d",q);
-	MPI_Comm my_row_comm;
-	MPI_Comm my_col_comm;
+  //printf("this is my q: %d",q);
+  MPI_Comm my_row_comm;
+  MPI_Comm my_col_comm;
 
 
     
@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     my_row=mypid/q;
     my_col=mypid%q;
     blockSize=rows/q;
-	MPI_Comm_split(MPI_COMM_WORLD,my_row,mypid,&my_row_comm);
+  MPI_Comm_split(MPI_COMM_WORLD,my_row,mypid,&my_row_comm);
     MPI_Comm_split(MPI_COMM_WORLD,my_col,mypid,&my_col_comm);
     double randomNumber;
    
@@ -68,12 +68,12 @@ int main(int argc, char* argv[])
     localTempN=(double *)malloc(blockSize*blockSize*sizeof(double));
   /*  if(mypid<q*q)
     {
-    	MPI_Comm_rank(my_row_comm,&myIdInRowGroup);
-    	MPI_Comm_rank(my_col_comm,&myIdInColGroup);
-    	printf("my comm world Id: %d \n",mypid);
-    	printf("my row Id: %d \n",myIdInRowGroup);
-    	printf("my col Id: %d \n",myIdInColGroup);
-    	printf("\n");
+      MPI_Comm_rank(my_row_comm,&myIdInRowGroup);
+      MPI_Comm_rank(my_col_comm,&myIdInColGroup);
+      printf("my comm world Id: %d \n",mypid);
+      printf("my row Id: %d \n",myIdInRowGroup);
+      printf("my col Id: %d \n",myIdInColGroup);
+      printf("\n");
     }*/
        
         if(mypid==0) //make the first process generete the M,N matrix but not timing this, and make process0 scatter the result but not timing the scatter time.
@@ -117,14 +117,14 @@ int main(int argc, char* argv[])
             {
                 for(i=0;i<blockSize*blockSize;i++)
                 {
-                    bigArrayForM[blockSize*blockSize*step+i]=M[blockSize*(step/q)+i/q][blockSize*(step%q)+i%q];
+                    bigArrayForM[blockSize*blockSize*step+i]=M[blockSize*(step/q)+i/blockSize][blockSize*(step%q)+i%blockSize];
                 }
             }
               for(step=0;step<q*q;step++)
             {
                 for(i=0;i<blockSize*blockSize;i++)
                 {
-                   bigArrayForN[blockSize*blockSize*step+i]=N[blockSize*(step/q)+i/q][blockSize*(step%q)+i%q];
+                   bigArrayForN[blockSize*blockSize*step+i]=N[blockSize*(step/q)+i/blockSize][blockSize*(step%q)+i%blockSize];
                 }
             }  
 
@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
                         {
                             //this step is very delicate.
                   
-                         subResult[i/q][i%q] =subResult[i/q][i%q]+localTempM[(i/q)*blockSize+l]*localSubmatrixN[l*blockSize+(i%q)];
+                         subResult[i/blockSize][i%blockSize] =subResult[i/blockSize][i%blockSize]+localTempM[(i/blockSize)*blockSize+l]*localSubmatrixN[l*blockSize+(i%blockSize)];
                          /* printf(" %lf \n",subResult[i/q][i%q]);*/
                         }
                     
@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
               }*/
               
 
-
+/*
         if(mypid==0)
         {
             printf("Here is the result: \n");
@@ -231,7 +231,7 @@ int main(int argc, char* argv[])
             }
             printf("\n");
         }
-        }
+        }*/
 
     /*             if(mypid==0)
         {
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
              }
              else
             {
-             MPI_Send(localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,blockSize-1,0,my_col_comm);
+             MPI_Send(localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,q-1,0,my_col_comm);
             }
             //now need to receive
             if(myIdInColGroup!=q-1)
@@ -270,7 +270,7 @@ int main(int argc, char* argv[])
         //ok now, after all the multiplication, we should print out the local result
         MPI_Barrier(MPI_COMM_WORLD);
 
-       /* if(mypid==0)
+        if(mypid==0)
         {
             printf("Here is the result: \n");
         for(i=0;i<blockSize;i++)
@@ -281,26 +281,26 @@ int main(int argc, char* argv[])
             }
             printf("\n");
         }
-        }*/
+        }
 
-    	
- /*   	if(myIdInRowGroup==0)
-    	{
+      
+ /*     if(myIdInRowGroup==0)
+      {
            srand(time(NULL)+mypid);
            randomNumber=r2();
            
-    	   printf("grouprow: %d ,the number I generated is : %lf \n",my_row,randomNumber);
+         printf("grouprow: %d ,the number I generated is : %lf \n",my_row,randomNumber);
            MPI_Bcast(&randomNumber,1,MPI_DOUBLE,0,my_row_comm);
            
-    	}
-    	else
-    	{
-    		MPI_Bcast(&randomNumber,1,MPI_DOUBLE,0,my_row_comm);
-    	}
-    	if(myIdInRowGroup!=0)
-    	{
-    	printf("my rowGroup is : %d the number I have is : %lf \n",my_row,randomNumber);
-    	
+      }
+      else
+      {
+        MPI_Bcast(&randomNumber,1,MPI_DOUBLE,0,my_row_comm);
+      }
+      if(myIdInRowGroup!=0)
+      {
+      printf("my rowGroup is : %d the number I have is : %lf \n",my_row,randomNumber);
+      
         }
 */
 
