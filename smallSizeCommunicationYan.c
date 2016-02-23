@@ -17,15 +17,15 @@ int main(int argc, char* argv[])
     int i,j,k,l;
   int my_row,my_col;
   int myIdInRowGroup, myIdInColGroup;
-    int rows=pow(2,7);
-    int cols=pow(2,7);
+    int rows=pow(2,12);
+    int cols=pow(2,12);
     int blockSize; //this will store the size of each submatrix that is on each process
     double *localSubmatrixM;
     double *localSubmatrixN;
     double **localM;
     double **localN;
-    double **SubMatrixToSendM;  // this is the data to be scattered to each process
-    double **SubMatrixToSendN;
+    double **subMatrixToSendM;  // this is the data to be scattered to each process
+    double **subMatrixToSendN;
     double **localSubmatrixNNew; // this is the data to be received on the local.
     double **localSubmatrixMNew;
     double **localTempMNew;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     double **R;
     double *bigArrayForM;
     double *bigArrayForN;
-    double sstart,sfinish,pstart,pfinish;//store serialized multiplication and parallel multiplication time
+    double sstart,sfinish,pstart,pfinish,dstart,dfinish;//store serialized multiplication and parallel multiplication time and distribution time of the data.
     
   //printf("this is my q: %d",q);
   MPI_Comm my_row_comm;
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     localTempMNew=(double **)malloc(blockSize*sizeof(double *));
     for(i=0;i<blockSize;i++)
     {
-      localTempMNew[i]=(double*)malloc(blockSize*sizeof(double))
+      localTempMNew[i]=(double*)malloc(blockSize*sizeof(double));
     }
     for(i=0;i<blockSize;i++)
     {
@@ -96,19 +96,19 @@ int main(int argc, char* argv[])
       }
     }
     //trying to change the way of doing this, trying to scatetr the big matrix row by row hopefully
-    SubMatrixToSendM=(double **)malloc(blockSize*sizeof(double *));
-    SubMatrixToSendN=(double **)malloc(blockSize*sizeof(double *));
+    subMatrixToSendM=(double **)malloc(blockSize*sizeof(double *));
+    subMatrixToSendN=(double **)malloc(blockSize*sizeof(double *));
     for(i=0;i<blockSize;i++)
     {
-      SubMatrixToSendM[i]=(double *)malloc(blockSize*sizeof(double));
-      SubMatrixToSendN[i]=(double *)malloc(blockSize*sizeof(double));
+      subMatrixToSendM[i]=(double *)malloc(blockSize*sizeof(double));
+      subMatrixToSendN[i]=(double *)malloc(blockSize*sizeof(double));
     }
     for(i=0;i<blockSize;i++)
     {
       for(j=0;j<blockSize;j++)
       {
-        SubMatrixToSendM[i][j]=0;
-        SubMatrixToSendN[i][j]=0;
+        subMatrixToSendM[i][j]=0;
+        subMatrixToSendN[i][j]=0;
       }
     }
 
@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
 
               printf("time took for serialized multiplication of size %d * %d matrix is: %lf \n",rows,cols,sfinish-sstart);
              //this will put M,N in contiguous manner, so we can send them off to other process using MPI_Scatter, this part is pretty tricky but beautiful.
-        /*    for(step=0;step<q*q;step++)
+            for(step=0;step<q*q;step++)
             {
                 for(i=0;i<blockSize*blockSize;i++)
                 {
@@ -224,14 +224,14 @@ int main(int argc, char* argv[])
                 {
                    bigArrayForN[blockSize*blockSize*step+i]=N[blockSize*(step/q)+i/blockSize][blockSize*(step%q)+i%blockSize];
                 }
-            }  */
+            }  
              for(step=0;step<q*q;step++)
              {
               for(i=0;i<blockSize;i++)
               {
                 for(j=0;j<blockSize;j++)
                 {
-                  localSubmatrixMNew[j]=M[blockSize*(step/q)+i][blockSize*(step%q)+j];
+                  subMatrixToSendM[i][j]=M[blockSize*(step/q)+i][blockSize*(step%q)+j];
                 }
               }
              }
@@ -241,43 +241,53 @@ int main(int argc, char* argv[])
               {
                 for(j=0;j<blockSize;j++)
                 {
-                  localSubmatrixNNew[j]=N[blockSize*(step/q)+i][blockSize*(step%q)+j];
+                  subMatrixToSendN[i][j]=N[blockSize*(step/q)+i][blockSize*(step%q)+j];
                 }
               }
              }
 
-            for(i=0;i<blockSize;i++)
+          /*  for(i=0;i<q;i++)
             {
               MPI_Scatter(subMatrixToSendM[i],blockSize,MPI_DOUBLE,localSubmatrixMNew[i],blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
               MPI_Scatter(subMatrixToSendN[i],blockSize,MPI_DOUBLE,localSubmatrixNNew[i],blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
-            }
+            }*/
             //scatter M and N
-      /*      MPI_Scatter(bigArrayForM,blockSize*blockSize,MPI_DOUBLE,localSubmatrixM,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
-            MPI_Scatter(bigArrayForN,blockSize*blockSize,MPI_DOUBLE,localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);*/
+            MPI_Scatter(bigArrayForM,blockSize*blockSize,MPI_DOUBLE,localSubmatrixM,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
+            MPI_Scatter(bigArrayForN,blockSize*blockSize,MPI_DOUBLE,localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
            /* for(i=0;i<blockSize*blockSize;i++)
             {
                 printf("%lf in process ID: %d: \n",localSubmatrixM[i],mypid);
             }*/
            //the above block is the most delicate part to make it successful!
 
-      
-    }
+           }
         else
         {
 
-        /*    MPI_Scatter(bigArrayForM,blockSize*blockSize,MPI_DOUBLE,localSubmatrixM,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
-            MPI_Scatter(bigArrayForN,blockSize*blockSize,MPI_DOUBLE,localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);*/
-          for(i=0;i<blockSize;i++)
+            MPI_Scatter(bigArrayForM,blockSize*blockSize,MPI_DOUBLE,localSubmatrixM,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
+            MPI_Scatter(bigArrayForN,blockSize*blockSize,MPI_DOUBLE,localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
+       /*   for(i=0;i<q;i++)
             {
               MPI_Scatter(subMatrixToSendM[i],blockSize,MPI_DOUBLE,localSubmatrixMNew[i],blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
               MPI_Scatter(subMatrixToSendN[i],blockSize,MPI_DOUBLE,localSubmatrixNNew[i],blockSize,MPI_DOUBLE,0,MPI_COMM_WORLD);
-            }
+            }*/
     
           /*  for(i=0;i<blockSize*blockSize;i++)
             {
                 printf("%lf in process ID: %d: \n",localSubmatrixM[i],mypid);
             }*/
         }
+
+   /*     if(mypid==1)
+        {
+          for(i=0;i<blockSize*blockSize;i++)
+          {
+            
+              printf("subM is %lf ",localSubmatrixN[i]);
+            
+            printf("\n");
+          }
+        }*/
        
        //beginning of the fox algorithms, call MPI_BARRIER make sure each process is on the same page
         MPI_Comm_rank(my_row_comm,&myIdInRowGroup);
@@ -300,18 +310,28 @@ int main(int argc, char* argv[])
                 for(i=0;i<blockSize;i++)
                 {
                   //in this way you will still keep the data youw want on each process
-                   localTempMNew[i]=localSubmatrixMNew[i];
+                   //localTempMNew[i]=localSubmatrixMNew[i];
+                  for(j=0;j<blockSize;j++)
+                  {
+                    localTempMNew[i][j]=localSubmatrixM[i*blockSize+j];
+                  }
                   MPI_Bcast(localTempMNew[i],blockSize,MPI_DOUBLE,myIdInRowGroup,my_row_comm);
 
                 }
-          
-               
+         
+                
               }
                else
                {
                 for(i=0;i<blockSize;i++)
                 {
-                   MPI_Bcast(localTempMNew[i],blockSize,MPI_DOUBLE,((mypid/q)+transferStep)%q,my_row_comm);
+                   for(j=0;j<blockSize;j++)
+                  {
+                    localTempMNew[i][j]=localSubmatrixM[i*blockSize+j];
+                  }
+                  MPI_Bcast(localTempMNew[i],blockSize,MPI_DOUBLE,((mypid/q)+transferStep)%q,my_row_comm);
+
+                   //MPI_Bcast(localTempMNew[i],blockSize,MPI_DOUBLE,((mypid/q)+transferStep)%q,my_row_comm);
                 }
                }
          /*   if(mypid/q==1)
@@ -341,6 +361,16 @@ int main(int argc, char* argv[])
                 for(j=0;j<blockSize;j++)
                 {*/
                     //so need the ith row of subA and jth col of subB multiply together
+                  if(transferStep==0) //only do this at the first step since need to initialize the localSubMatrixNNew with the localSubmatixN
+                  {
+                     for(k=0;k<blockSize;k++)
+                    { //and k will be used as a tag
+                     for(i=0;i<blockSize;i++)
+                        {
+                        localSubmatrixNNew[k][i]=localSubmatrixN[k*blockSize+i];
+                        }
+                    }
+                   }
                   for(i=0;i<blockSize*blockSize;i++)
                   {
                     
@@ -389,11 +419,15 @@ int main(int argc, char* argv[])
             //for matrix N we can use BroadCasting, we have to use send receive, since now the all the process in the same column get the same data
           for(k=0;k<blockSize;k++)
           { //and k will be used as a tag
-                     if(myIdInColGroup!=0)
+            for(i=0;i<blockSize;i++)
+            {
+             localSubmatrixNNew[k][i]=localSubmatrixN[k*blockSize+i];
+            }
+            if(myIdInColGroup!=0)
             {
                 //0 here is the tag for send and receive
             //MPI_Send(localSubmatrixN,blockSize*blockSize,MPI_DOUBLE,myIdInColGroup-1,0,my_col_comm);
-              MPI_Send(localSubmatrixNNew,blockSize,MPI_DOUBLE,myIdInColGroup-1,k,my_col_comm);
+              MPI_Send(localSubmatrixNNew[k],blockSize,MPI_DOUBLE,myIdInColGroup-1,k,my_col_comm);
              }
              else
             {
@@ -412,7 +446,14 @@ int main(int argc, char* argv[])
               MPI_Recv(localSubmatrixNNew[k],blockSize,MPI_DOUBLE,0,k,my_col_comm,MPI_STATUS_IGNORE);
             }
           }
-
+      /*    if(mypid==2&&transferStep==1)
+          {
+            for(j=0;j<blockSize;j++)
+            {
+              printf("test: %lf",localSubmatrixNNew[0][j]);
+            }
+            printf("\n");
+          }*/
 
  
            MPI_Barrier(MPI_COMM_WORLD);
