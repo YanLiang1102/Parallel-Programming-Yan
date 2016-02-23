@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
     int i,j,k,l;
   int my_row,my_col;
   int myIdInRowGroup, myIdInColGroup;
-    int rows=pow(2,6);
-    int cols=pow(2,6);
+    int rows=pow(2,10);
+    int cols=pow(2,10);
     int blockSize; //this will store the size of each submatrix that is on each process
     double *localSubmatrixM;
     double *localSubmatrixN;
@@ -475,7 +475,7 @@ int main(int argc, char* argv[])
         }*/printf("distribution time for parallel multiplication of size %d * %d matrix to %d processes is : %lf seconds\n",rows,cols,mysize,dfinish-dstart);
             printf("calculation time took for parallel multiplication of size %d * %d matrix with %d processes is : %lf seconds\n",rows,cols,mysize,pfinish-pstart);
             printf("total  time of size %d * %d matrix to %d processes is: %lf seconds\n",rows,cols,mysize,dfinish-dstart+pfinish-pstart);
-       
+
             for(i=0;i<blockSize;i++)
             {
               for(j=0;j<blockSize;j++)
