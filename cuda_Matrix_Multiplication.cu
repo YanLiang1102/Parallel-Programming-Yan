@@ -15,11 +15,12 @@ __global__ void MatrixMulKernel(float* Md, float* Nd,float* Pd,int Width)
 
 	Pd[threadIdx.y*Width+threadIdx.x]=Pvalue;
 }*/
+    double r1();
 
 	__global__ void MatrixMulKernel(float* M,float* N, float* Pd, int blockSize,int loopTimes)
 	{
-	__shared__ float Ms[1][1];
-	__shared__ float Ns[1][1];
+	__shared__ float Ms[16][16];
+	__shared__ float Ns[16][16];
 	int bx=blockIdx.x;
 	int by=blockIdx.y;
 	int tx=threadIdx.x;
@@ -45,8 +46,8 @@ __global__ void MatrixMulKernel(float* Md, float* Nd,float* Pd,int Width)
 int main()
 {
 
-	int matrixSize=2;//pow(2,8);
-	int blockSize=1;//pow(2,4);
+	int matrixSize=pow(2,8);//pow(2,8);
+	int blockSize=pow(2,4);//pow(2,4);
 	int noOfElement=matrixSize*matrixSize;
 	float* M;
 	float* N;
@@ -58,8 +59,8 @@ int main()
 
 	for(int i=0;i<noOfElement;i++)
 	{
-		M[i]=i+1.0;
-		N[i]=i+2.0;
+		M[i]=r1();
+		N[i]=r1();
 		P[i]=0.0;
 	}
 
@@ -111,4 +112,9 @@ int main()
 
 
 	return 0;
+}
+
+double r1()
+{
+    return -1.0*(double)rand() / (double)RAND_MAX ;
 }
