@@ -1,20 +1,7 @@
 #include <stdio.h>
 #include <cuda.h>
+#include <time.h>
 
-/*
-__global__ void MatrixMulKernel(float* Md, float* Nd,float* Pd,int Width)
-{
-	float Pvalue=0;
-
-	for(int k=0;k<Width;++k)
-	{
-		float Melement=Md[threadIdx.y*Width+k];
-		float Nelement=Nd[k*Width+threadIdx.x];
-		Pvalue+=Melement*Nelement;
-	}
-
-	Pd[threadIdx.y*Width+threadIdx.x]=Pvalue;
-}*/
     double r1();
 
 	__global__ void MatrixMulKernel(float* M,float* N, float* Pd, int blockSize,int loopTimes)
@@ -46,8 +33,8 @@ __global__ void MatrixMulKernel(float* Md, float* Nd,float* Pd,int Width)
 int main()
 {
 
-	int matrixSize=pow(2,8);//pow(2,8);
-	int blockSize=pow(2,4);//pow(2,4);
+	int matrixSize=pow(2,8);
+	int blockSize=pow(2,4); //the default blockSize I will put as is 16
 	int noOfElement=matrixSize*matrixSize;
 	float* M;
 	float* N;
@@ -55,7 +42,8 @@ int main()
 	M=(float*)malloc(noOfElement*sizeof(float));
 	N=(float*)malloc(noOfElement*sizeof(float));
 	P=(float*)malloc(noOfElement*sizeof(float));
-	//float M[matrixSize],N[matrixSize],P[matrixSize];
+	clock_t begin, end;
+
 
 	for(int i=0;i<noOfElement;i++)
 	{
@@ -63,34 +51,14 @@ int main()
 		N[i]=r1();
 		P[i]=0.0;
 	}
+	//start timing after generating the matrix
+	begin = clock();
 
 	float* Pd,*Md,*Nd;
     int size=noOfElement*sizeof(float);
 	cudaMalloc((void**)&Pd,size);
-/*
-	int size=Width*Width*sizeof(float);
-    float* Md, *Nd, *Pd;
 
-    cudaMalloc((void**)&Md,size);
-	cudaMemcpy(Md,M,size,cudaMemcpyHostToDevice);
-	cudaMalloc((void**)&Nd,size);
-	cudaMemcpy(Nd,N,size,cudaMemcpyHostToDevice);
-	cudaMalloc((void**)&Pd,size);
-
-    dim3 dimGrid(1,1);
-    dim3 dimBlock(Width,Width);
-    MatrixMulKernel<<<dimGrid,dimBlock>>>(Md,Nd,Pd,Width);
-
-    cudaMemcpy(P,Pd,size,cudaMemcpyDeviceToHost);
-
-	cudaFree(Md);
-	cudaFree(Nd);
-	cudaFree(Pd);
-
-	for(int i=0;i<4;i++)
-	{
-		printf("result: %f \n",P[i]);
-	}*/
+    //sned M and N to device
     cudaMalloc((void**)&Md,size);
 	cudaMemcpy(Md,M,size,cudaMemcpyHostToDevice);
 	cudaMalloc((void**)&Nd,size);
@@ -105,11 +73,22 @@ int main()
 
 	cudaFree(Pd);
 
-	for(int i=0;i<noOfElement;i++)
+	
+    double time_spent;
+
+    
+/* here, do your time-consuming job */
+    end = clock();
+    time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("time Spend for matrix size: (%d,%d), with blockSize: %d is :%f \n",matrixSize,matrixSize,blockSize,time_spent);
+   
+
+    printf("The following are the first 100 reuslt from the matrix multiplication:\n");
+    //print out first 100 result.
+	for(int i=0;i<100;i++)
 	{
 		printf("result: %f \n",P[i]);
 	}
-
 
 	return 0;
 }
