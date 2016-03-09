@@ -51,9 +51,9 @@ int main()
 	float* M;
 	float* N;
 	float* P;
-	M=malloc(noOfElement*sizeof(float));
-	N=malloc(noOfElement*sizeof(float));
-	P=malloc(noOfElement*sizeof(float));
+	M=(float*)malloc(noOfElement*sizeof(float));
+	N=(float*)malloc(noOfElement*sizeof(float));
+	P=(float*)malloc(noOfElement*sizeof(float));
 	//float M[matrixSize],N[matrixSize],P[matrixSize];
 
 	for(int i=0;i<noOfElement;i++)
@@ -63,7 +63,7 @@ int main()
 		P[i]=0.0;
 	}
 
-	float* Pd;
+	float* Pd,*Md,*Nd;
     int size=noOfElement*sizeof(float);
 	cudaMalloc((void**)&Pd,size);
 /*
@@ -90,10 +90,14 @@ int main()
 	{
 		printf("result: %f \n",P[i]);
 	}*/
+    cudaMalloc((void**)&Md,size);
+	cudaMemcpy(Md,M,size,cudaMemcpyHostToDevice);
+	cudaMalloc((void**)&Nd,size);
+	cudaMemcpy(Nd,N,size,cudaMemcpyHostToDevice);
     dim3 dimGrid(matrixSize/blockSize,matrixSize/blockSize);
     dim3 dimBlock(blockSize,blockSize);
-    MatrixMulKernel<<<dimGrid,dimBlock>>>(M,N,Pd,blockSize,matrixSize/blockSize);
-    __syncthreads();
+    MatrixMulKernel<<<dimGrid,dimBlock>>>(Md,Nd,Pd,blockSize,matrixSize/blockSize);
+ 
 
     cudaMemcpy(P,Pd,size,cudaMemcpyDeviceToHost);
 
