@@ -47,16 +47,16 @@ int main()
 
 	int matrixSize=2;//pow(2,8);
 	int blockSize=1;//pow(2,4);
-	//int noOfElement=matrixSize*matrixSize;
-/*	float* M;
+	int noOfElement=matrixSize*matrixSize;
+	float* M;
 	float* N;
 	float* P;
-	M=malloc(4*sizeof(float));
-	N=malloc(4*sizeof(float));
-	P=malloc(4*sizeof(float));*/
-	float M[matrixSize],N[matrixSize],P[matrixSize];
+	M=malloc(noOfElement*sizeof(float));
+	N=malloc(noOfElement*sizeof(float));
+	P=malloc(noOfElement*sizeof(float));
+	//float M[matrixSize],N[matrixSize],P[matrixSize];
 
-	for(int i=0;i<matrixSize*matrixSize;i++)
+	for(int i=0;i<noOfElement;i++)
 	{
 		M[i]=i+1.0;
 		N[i]=i+2.0;
@@ -64,7 +64,7 @@ int main()
 	}
 
 	float* Pd;
-    int size=matrixSize*matrixSize*sizeof(float);
+    int size=noOfElement*sizeof(float);
 	cudaMalloc((void**)&Pd,size);
 /*
 	int size=Width*Width*sizeof(float);
@@ -100,7 +100,7 @@ int main()
 
 	cudaFree(Pd);
 
-	for(int i=0;i<matrixSize*matrixSize;i++)
+	for(int i=0;i<noOfElement;i++)
 	{
 		printf("result: %f \n",P[i]);
 	}
