@@ -56,7 +56,7 @@ int main()
 	P=malloc(4*sizeof(float));*/
 	float M[matrixSize],N[matrixSize],P[matrixSize];
 
-	for(int i=0;i<matrixSize-1;i++)
+	for(int i=0;i<matrixSize*matrixSize;i++)
 	{
 		M[i]=i+1.0;
 		N[i]=i+2.0;
@@ -64,7 +64,7 @@ int main()
 	}
 
 	float* Pd;
-    int size=matrixSize*sizeof(float);
+    int size=matrixSize*matrixSize*sizeof(float);
 	cudaMalloc((void**)&Pd,size);
 /*
 	int size=Width*Width*sizeof(float);
@@ -93,13 +93,14 @@ int main()
     dim3 dimGrid(matrixSize/blockSize,matrixSize/blockSize);
     dim3 dimBlock(blockSize,blockSize);
     MatrixMulKernel<<<dimGrid,dimBlock>>>(M,N,Pd,blockSize,matrixSize/blockSize);
+    __syncthreads();
 
     cudaMemcpy(P,Pd,size,cudaMemcpyDeviceToHost);
 
 
 	cudaFree(Pd);
 
-	for(int i=0;i<matrixSize;i++)
+	for(int i=0;i<matrixSize*matrixSize;i++)
 	{
 		printf("result: %f \n",P[i]);
 	}
