@@ -7,7 +7,7 @@
     //this is the kernel to calculate the P=(a,b,c,d)
     //need to pass in the step which is j, and then figure out which thread to work on
     //the calculation in (2^j,2*2^j,3*2^j....)
-    __global__ void CalculatePArrayKernel(int step,int powerNumber, float** A, float** B, float** C, float** D)
+    __global__ void CalculatePArrayKernel(int step,int powerNumber,int totalNumber,float** A, float** B, float** C, float** D)
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
       //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
@@ -206,7 +206,8 @@
         {
             //for each j do the work sequentially, inside this loop do work parallel.
           int powerNumber=pow(2,j-1);
-           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,AT,BT,CT,DT);
+          int totalNumber=pow(2,EXPO);
+           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
         }
         //copy data back to device
         cudaMemcpy(A,AT,m,cudaMemcpyDeviceToHost);
