@@ -2,7 +2,7 @@
     #include <cuda.h>
     #include <time.h>
     #define EXPO 9
-    #define BLOCKSIZE 16
+   
 
     //this is the kernel to calculate the P=(a,b,c,d)
     //need to pass in the step which is j, and then figure out which thread to work on
@@ -11,15 +11,17 @@
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
       int local_dimension=pow(2,EXPO-1)-1
-      __shared__ float A_Local[local_dimension];
-      __shared__ float B_Local[local_dimension];
-      __shared__ float C_Local[local_dimension];
-      __shared__ float D_Local[local_dimension];
+      __shared__ float A_Local[511];
+      __shared__ float B_Local[511];
+      __shared__ float C_Local[511];
+      __shared__ float D_Local[511];
 
       int bx=blockIdx.x;
       int by=blockIdx.y;
       int tx=threadIdx.x;
-          int ty=threadIdx.y;
+      int ty=threadIdx.y;
+      int BLOCKSIZE=16;
+      int powerNumber=(int)(pow(2.0,(step-1)*1.0);
 
       int temp=ty*BLOCKSIZE+tx;
       //need to notice threadId in different block should be the same
@@ -44,9 +46,9 @@
        if(by==0)//means this is the first block ,As will be calculated here
        {
         //if for boundary check
-        if(temp-pow(2,step-1)>0)
+        if(powerNumber>0)
         {
-        A[step][temp]=(-1)*A_Local[temp]/(B_Local[temp-pow(2,step-1)])*A_Local[temp-pow(2,step-1)];
+        A[step][temp]=(-1)*A_Local[temp]/(B_Local[powerNumber])*A_Local[powerNumber];
         }
         else
         {
@@ -68,15 +70,15 @@
 
        if(by==1) //means this is the second block, Bs will be calculated here
        {
-        if(temp-pow(2,step-1)>0 && temp+pow(2,step-1)<pow(2,EXPO))
+        if(powerNumber>0 && temp+pow(2,step-1)<pow(2,EXPO))
         {
-        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-pow(2,step-1)]*C_Local[temp-pow(2,step-1)]-C_Local[temp]/B_Local[temp+pow(2,step-1)]*A_Local[temp+pow(2,step-1)];
+        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[powerNumber]*C_Local[powerNumber]-C_Local[temp]/B_Local[temp+pow(2,step-1)]*A_Local[temp+pow(2,step-1)];
         }
-        else if(temp-pow(2,step-1)>0 && temp+pow(2,step-1)>=pow(2,EXPO))
+        else if(powerNumber>0 && temp+pow(2,step-1)>=pow(2,EXPO))
         {
-        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-pow(2,step-1)]*C_Local[temp-pow(2,step-1)];
+        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[powerNumber]*C_Local[powerNumber];
         }
-        else if(temp-pow(2,step-1)<=0 && temp+pow(2,step-1)<pow(2,EXPO))
+        else if(powerNumber<=0 && temp+pow(2,step-1)<pow(2,EXPO))
         {
         B[step][temp]=B_Local[temp]-C_Local[temp]/B_Local[temp+pow(2,step-1)]*A_Local[temp+pow(2,step-1)];
         }
@@ -88,15 +90,15 @@
 
        if(by==3) //this is the fourth block, Ds will be calculated here
        { 
-        if(temp-pow(2,step-1)>0 && temp+pow(2,step-1)<pow(2,EXPO))
+        if(powerNumber>0 && temp+pow(2,step-1)<pow(2,EXPO))
         {
-        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-pow(2,step-1)]*D_Local[temp-pow(2,step-1)]-C_Local[temp]/B_Local[temp+pow(2,step-1)]*D_Local[temp+pow(2,step-1)]; 
+        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[powerNumber]*D_Local[powerNumber]-C_Local[temp]/B_Local[temp+pow(2,step-1)]*D_Local[temp+pow(2,step-1)]; 
         }
-        else if(temp-pow(2,step-1)>0 && temp+pow(2,step-1)>=pow(2,EXPO))
+        else if(powerNumber>0 && temp+pow(2,step-1)>=pow(2,EXPO))
         {
-        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-pow(2,step-1)]*D_Local[temp-pow(2,step-1)];
+        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[powerNumber]*D_Local[powerNumber];
         }
-        else if(temp-pow(2,step-1)<=0 && temp+pow(2,step-1)<pow(2,EXPO))
+        else if(powerNumber<=0 && temp+pow(2,step-1)<pow(2,EXPO))
         {
         D[step][temp]=D_Local[temp]-C_Local[temp]/B_Local[temp+pow(2,step-1)]*D_Local[temp+pow(2,step-1)]; 
         }
@@ -110,7 +112,7 @@
 
     int main()
     {
-      
+        
         int m=pow(2,EXPO)-1;
         int b=1;
         int a=0;
@@ -200,7 +202,7 @@
 
         for(int j=1;j<EXPO;j++)
         {
-          //for each j do the work sequentially, inside this loop do work parallel.
+            //for each j do the work sequentially, inside this loop do work parallel.
           
            CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,AT[j],BT[j],CT[j],DT[j]);
         }
