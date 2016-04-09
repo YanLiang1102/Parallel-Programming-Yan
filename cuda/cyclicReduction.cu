@@ -110,7 +110,7 @@
 
     int main()
     {
-    	
+      
         int m=pow(2,EXPO)-1;
         int b=1;
         int a=0;
@@ -180,18 +180,51 @@
         {
             D[0][i]=2*(i+1)*pow(delta,3);
         }
-        return 0;
+       clock_t begin,end;
         //so need to set up different grid dimension for different value of j,
         //when j decrease the size of the thread using will decrease.
         dim3 dimGrid(4,1); //so we have 4 blocks each block will in charge a,b,c,d respectly.
         dim3 dimBlock(16,16);
 
+        //m is the size
+        float ** AT,**BT,**CT,**DT;
+        cudaMalloc((void***)&AT,m);
+        cudaMalloc((void***)&BT,m);
+        cudaMalloc((void***)&CT,m);
+        cudaMalloc((void***)&DT,m);
+
+        cudaMemcpy(AT,A,m,cudaMemcpyHostToDevice);
+        cudaMemcpy(BT,B,m,cudaMemcpyHostToDevice);
+        cudaMemcpy(CT,C,m,cudaMemcpyHostToDevice);
+        cudaMemcpy(DT,D,m,cudaMemcpyHostToDevice);
+
         for(int j=1;j<EXPO;j++)
         {
-        	//for each j do the work sequentially, inside this loop do work parallel.
+          //for each j do the work sequentially, inside this loop do work parallel.
           
-           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j);
+           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,AT[j],BT[j],CT[j],DT[j]);
         }
+        //copy data back to device
+        cudaMemcpy(A,AT,m,cudaMemcpyDeviceToHost);
+        cudaMemcpy(B,BT,m,cudaMemcpyDeviceToHost);
+        cudaMemcpy(C,CT,m,cudaMemcpyDeviceToHost);
+        cudaMemcpy(D,DT,m,cudaMemcpyDeviceToHost);
+    
+        double time_spent;
 
+        end=clock();
+        time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
+        printf("time spend for 524 n points is :%f",time_spent);
 
+        for(int k=0;k<10;k++)
+        {
+         printf("A new: %f \n",A[1][k]);
+        }
+        
+        cudaFree(AT);
+        cudaFree(BT);
+        cudaFree(CT);
+        cudaFree(DT);
+
+        return 0;
     }
