@@ -43,17 +43,12 @@
         B_Local[temp]=B[step-1][temp];
         __syncthreads();
 
-        //now test if the matrix is being loaded correctly
-        if(by==2)   //since the second block should load everything
-        {
-            for(int i=0;i<10;i++)
+     
+            for(int i=0;i<1;i++)
             {
                 printf("cuda A: %f in step :%d \n", A_Local[i],step);
-                printf("cuda B: %f in step :%d \n", B_Local[i],step);
-                printf("cuda C: %f in step :%d \n", C_Local[i],step);
-                printf("cuda D: %f in step :%d \n", D_Local[i],step);
+        
             }
-        }
 
 
        if(by==0)//means this is the first block ,As will be calculated here
@@ -205,19 +200,19 @@
 
         //m is the size
         float ** AT,**BT,**CT,**DT;
-        int size=m*sizeof(float);
+        int size=m*sizeof(float*);
 
-        cudaMalloc((void***)&AT,size);
-        cudaMalloc((void***)&BT,size);
-        cudaMalloc((void***)&CT,size);
-        cudaMalloc((void***)&DT,size);
+        cudaMalloc((void**)&AT,size);
+        cudaMalloc((void**)&BT,size);
+        cudaMalloc((void**)&CT,size);
+        cudaMalloc((void**)&DT,size);
 
         cudaMemcpy(AT,A,size,cudaMemcpyHostToDevice);
         cudaMemcpy(BT,B,size,cudaMemcpyHostToDevice);
         cudaMemcpy(CT,C,size,cudaMemcpyHostToDevice);
         cudaMemcpy(DT,D,size,cudaMemcpyHostToDevice);
 
-        printf("this is to test EXPO should see 9 here: %f \n",EXPO);
+        printf("this is to test EXPO should see 9 here: %d \n",EXPO);
 
         for(int j=1;j<EXPO;j++)
         {
@@ -225,6 +220,7 @@
           int powerNumber=pow(2,j-1);
           int totalNumber=m+1;
            CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
+           printf("called from host %d \n",j);
         }
         //copy data back to device
         cudaMemcpy(A,AT,size,cudaMemcpyDeviceToHost);
@@ -249,6 +245,30 @@
         cudaFree(BT);
         cudaFree(CT);
         cudaFree(DT);
+      //release memory
+        for(int i=0;i<9;i++)
+        {
+            free(A[i]);
+        }
+        free(A);
+
+        for(int i=0;i<9;i++)
+        {
+            free(B[i]);
+        }
+        free(B);
+
+        for(int i=0;i<9;i++)
+        {
+            free(C[i]);
+        }
+        free(C);
+
+        for(int i=0;i<9;i++)
+        {
+            free(D[i]);
+        }
+        free(D);
 
         return 0;
     }
