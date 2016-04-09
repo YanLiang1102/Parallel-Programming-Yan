@@ -25,8 +25,8 @@
 
       int temp=ty*BLOCKSIZE+tx;
       //need to notice threadId in different block should be the same
-      for(int i=0;i<511;i++)
-      {
+     /* for(int i=0;i<511;i++)
+      {*/
         if(by!=1) //A has to be loaded in these blocks
         {
         A_Local[temp]=A[step-1][temp];
@@ -40,8 +40,21 @@
          D_Local[temp]=D[step-1][temp];
         }
         //B need to be loaded for all the block, no if should apply to that
-         B_Local[temp]=B[step-1][temp];
+        B_Local[temp]=B[step-1][temp];
         __syncthreads();
+
+        //now test if the matrix is being loaded correctly
+        if(by==2)   //since the second block should load everything
+        {
+            for(int i=0;i<10;i++)
+            {
+                printf("cuda A: %f in step :%d \n", A_Local[i],step);
+                printf("cuda B: %f in step :%d \n", B_Local[i],step);
+                printf("cuda C: %f in step :%d \n", C_Local[i],step);
+                printf("cuda D: %f in step :%d \n", D_Local[i],step);
+            }
+        }
+
 
        if(by==0)//means this is the first block ,As will be calculated here
        {
@@ -66,7 +79,7 @@
         {
          C[step][temp]=0;
         }
-        }
+       }
 
        if(by==1) //means this is the second block, Bs will be calculated here
        {
@@ -107,13 +120,13 @@
         D[step][temp]=D_Local[temp];
         }   
        }
-      }
+      //}
     }
 
     int main()
     {
         
-        int m=totalNumber-1;
+        int m=pow(2,EXPO)-1;
         int b=1;
         int a=0;
         float delta=(b-a)*1.0/(m+1.0);
@@ -127,7 +140,7 @@
         C=(float*)malloc(m*sizeof(float));
         D=(float*)malloc(m*sizeof(float));*/
 
-        float **A; //need a two dimension array to store different versin of A
+        float **A; //need a two dimension array to store different versin of A, so A will be A[step][i]; step is how many step will be 9 here and i will be 512 here.
         float **B;
         float **C;
         float **D;
@@ -197,16 +210,17 @@
         cudaMalloc((void***)&DT,m);
 
         cudaMemcpy(AT,A,m,cudaMemcpyHostToDevice);
-
         cudaMemcpy(BT,B,m,cudaMemcpyHostToDevice);
         cudaMemcpy(CT,C,m,cudaMemcpyHostToDevice);
         cudaMemcpy(DT,D,m,cudaMemcpyHostToDevice);
+
+        printf("this is to test EXPO should see 9 here: %f \n",EXPO);
 
         for(int j=1;j<EXPO;j++)
         {
             //for each j do the work sequentially, inside this loop do work parallel.
           int powerNumber=pow(2,j-1);
-          int totalNumber=totalNumber;
+          int totalNumber=m+1;
            CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
         }
         //copy data back to device
@@ -220,7 +234,7 @@
 
         end=clock();
         time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
-        printf("time spend for 524 n points is :%f",time_spent);
+        printf("time spend for 524 n points is :%f seconds \n",time_spent);
 
         for(int k=0;k<10;k++)
         {
