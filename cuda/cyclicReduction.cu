@@ -58,7 +58,7 @@
 
        if(by==2) //means this is the third block, Cs will be calculated here
        {
-        if(temp+powerNumber<pow(2,EXPO))
+        if(temp+powerNumber<totalNumber)
         {
          C[step][temp]=(-1)*C_Local[temp]/B_Local[temp+powerNumber]*C_Local[temp+powerNumber];   
         }
@@ -70,15 +70,15 @@
 
        if(by==1) //means this is the second block, Bs will be calculated here
        {
-        if(temp-powerNumber>0 && temp+powerNumber<pow(2,EXPO))
+        if(temp-powerNumber>0 && temp+powerNumber<totalNumber)
         {
         B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
         }
-        else if(temp-powerNumber>0 && temp+powerNumber>=pow(2,EXPO))
+        else if(temp-powerNumber>0 && temp+powerNumber>=totalNumber)
         {
         B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber];
         }
-        else if(temp-powerNumber<=0 && temp+powerNumber<pow(2,EXPO))
+        else if(temp-powerNumber<=0 && temp+powerNumber<totalNumber)
         {
         B[step][temp]=B_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
         }
@@ -90,15 +90,15 @@
 
        if(by==3) //this is the fourth block, Ds will be calculated here
        { 
-        if(temp-powerNumber>0 && temp+powerNumber<pow(2,EXPO))
+        if(temp-powerNumber>0 && temp+powerNumber<totalNumber)
         {
         D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
         }
-        else if(temp-powerNumber>0 && temp+powerNumber>=pow(2,EXPO))
+        else if(temp-powerNumber>0 && temp+powerNumber>=totalNumber)
         {
         D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber];
         }
-        else if(temp-powerNumber<=0 && temp+powerNumber<pow(2,EXPO))
+        else if(temp-powerNumber<=0 && temp+powerNumber<totalNumber)
         {
         D[step][temp]=D_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
         }
@@ -113,7 +113,7 @@
     int main()
     {
         
-        int m=pow(2,EXPO)-1;
+        int m=totalNumber-1;
         int b=1;
         int a=0;
         float delta=(b-a)*1.0/(m+1.0);
@@ -206,7 +206,7 @@
         {
             //for each j do the work sequentially, inside this loop do work parallel.
           int powerNumber=pow(2,j-1);
-          int totalNumber=pow(2,EXPO);
+          int totalNumber=totalNumber;
            CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
         }
         //copy data back to device
