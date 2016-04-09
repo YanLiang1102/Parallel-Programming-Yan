@@ -7,10 +7,10 @@
     //this is the kernel to calculate the P=(a,b,c,d)
     //need to pass in the step which is j, and then figure out which thread to work on
     //the calculation in (2^j,2*2^j,3*2^j....)
-    __global__ void CalculatePArrayKernel(int step, float** A, float** B, float** C, float** D)
+    __global__ void CalculatePArrayKernel(int step,int powerNumber, float** A, float** B, float** C, float** D)
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
-      int local_dimension=pow(2,EXPO-1)-1;
+      //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
       __shared__ float A_Local[511];
       __shared__ float B_Local[511];
       __shared__ float C_Local[511];
@@ -21,11 +21,11 @@
       int tx=threadIdx.x;
       int ty=threadIdx.y;
       int BLOCKSIZE=16;
-      int powerNumber=(int)(pow(2.0,(step-1)*1.0));
+      
 
       int temp=ty*BLOCKSIZE+tx;
       //need to notice threadId in different block should be the same
-      for(int i=0;i<local_dimension;i++)
+      for(int i=0;i<511;i++)
       {
         if(by!=1) //A has to be loaded in these blocks
         {
@@ -182,7 +182,8 @@
         {
             D[0][i]=2*(i+1)*pow(delta,3);
         }
-       clock_t begin,end;
+        clock_t begin,end;
+        begin=clock();
         //so need to set up different grid dimension for different value of j,
         //when j decrease the size of the thread using will decrease.
         dim3 dimGrid(4,1); //so we have 4 blocks each block will in charge a,b,c,d respectly.
@@ -204,8 +205,8 @@
         for(int j=1;j<EXPO;j++)
         {
             //for each j do the work sequentially, inside this loop do work parallel.
-          
-           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,AT,BT,CT,DT);
+          int powerNumber=pow(2,j-1);
+           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,AT,BT,CT,DT);
         }
         //copy data back to device
         cudaMemcpy(A,AT,m,cudaMemcpyDeviceToHost);
@@ -214,6 +215,7 @@
         cudaMemcpy(D,DT,m,cudaMemcpyDeviceToHost);
     
         double time_spent;
+
 
         end=clock();
         time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
