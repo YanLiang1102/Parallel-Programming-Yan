@@ -130,6 +130,7 @@
         int b=1;
         int a=0;
         float delta=(b-a)*1.0/(m+1.0);
+        /*int **by_global, **bx_global;*/
         /*float* A;
         float* B;
         float* C;
@@ -204,15 +205,17 @@
 
         //m is the size
         float ** AT,**BT,**CT,**DT;
-        cudaMalloc((void***)&AT,m);
-        cudaMalloc((void***)&BT,m);
-        cudaMalloc((void***)&CT,m);
-        cudaMalloc((void***)&DT,m);
+        int size=m*sizeof(float);
 
-        cudaMemcpy(AT,A,m,cudaMemcpyHostToDevice);
-        cudaMemcpy(BT,B,m,cudaMemcpyHostToDevice);
-        cudaMemcpy(CT,C,m,cudaMemcpyHostToDevice);
-        cudaMemcpy(DT,D,m,cudaMemcpyHostToDevice);
+        cudaMalloc((void***)&AT,size);
+        cudaMalloc((void***)&BT,size);
+        cudaMalloc((void***)&CT,size);
+        cudaMalloc((void***)&DT,size);
+
+        cudaMemcpy(AT,A,size,cudaMemcpyHostToDevice);
+        cudaMemcpy(BT,B,size,cudaMemcpyHostToDevice);
+        cudaMemcpy(CT,C,size,cudaMemcpyHostToDevice);
+        cudaMemcpy(DT,D,size,cudaMemcpyHostToDevice);
 
         printf("this is to test EXPO should see 9 here: %f \n",EXPO);
 
@@ -224,10 +227,10 @@
            CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
         }
         //copy data back to device
-        cudaMemcpy(A,AT,m,cudaMemcpyDeviceToHost);
-        cudaMemcpy(B,BT,m,cudaMemcpyDeviceToHost);
-        cudaMemcpy(C,CT,m,cudaMemcpyDeviceToHost);
-        cudaMemcpy(D,DT,m,cudaMemcpyDeviceToHost);
+        cudaMemcpy(A,AT,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(B,BT,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(C,CT,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(D,DT,size,cudaMemcpyDeviceToHost);
     
         double time_spent;
 
@@ -236,9 +239,10 @@
         time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
         printf("time spend for 524 n points is :%f seconds \n",time_spent);
 
-        for(int k=0;k<10;k++)
+        for(int k=0;k<100;k++)
         {
-         printf("A new: %f \n",A[1][k]);
+         printf("A new 1: %f \n",A[1][k]);
+          printf("A new 8: %f \n",A[8][k]);
         }
         
         cudaFree(AT);
