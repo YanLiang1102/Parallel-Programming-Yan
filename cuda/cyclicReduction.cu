@@ -7,25 +7,32 @@
     //this is the kernel to calculate the P=(a,b,c,d)
     //need to pass in the step which is j, and then figure out which thread to work on
     //the calculation in (2^j,2*2^j,3*2^j....)
-    __global__ void CalculatePArrayKernel(int step,int powerNumber,int totalNumber,float** A, float** B, float** C, float** D)
+    __global__ void CalculatePArrayKernel(int totalStep,float** A, float** B, float** C, float** D)
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
       //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
-      /*__shared__ float A_Local[511];
+      __shared__ float A_Local[511];
       __shared__ float B_Local[511];
       __shared__ float C_Local[511];
-      __shared__ float D_Local[511];*/
-      extern __shared__ float wholeArray[]; //dynamically allocate shared memory
+      __shared__ float D_Local[511];
+      for(int step=1;step<totalStep;step++)
+      {
+      printf("hello from step :%d \n",step);
+
+
+  /*    extern __shared__ float wholeArray[]; //dynamically allocate shared memory
       float* A_Local=(float*)&wholeArray[511];
       float* B_Local=(float*)&wholeArray[1022];
       float* C_Local=(float*)&wholeArray[1533];
-      float* D_Local=(float*)&wholeArray[2044];
+      float* D_Local=(float*)&wholeArray[2044];*/
 
       int bx=blockIdx.x;
       int by=blockIdx.y;
       int tx=threadIdx.x;
       int ty=threadIdx.y;
       int BLOCKSIZE=16;
+      int totalNumber=(int) pow(2.0,totalStep*1.0);
+      int powerNumber=(int) pow(2.0,step-1.0);
       
 
       int temp=ty*BLOCKSIZE+tx;
@@ -122,6 +129,8 @@
         D[step][temp]=D_Local[temp];
         }   
        }
+       __syncthreads();
+     }
       //}
     }
 
@@ -132,16 +141,7 @@
         int b=1;
         int a=0;
         float delta=(b-a)*1.0/(m+1.0);
-        /*int **by_global, **bx_global;*/
-        /*float* A;
-        float* B;
-        float* C;
-        float* D;
 
-        A=(float*)malloc(m*sizeof(float));
-        B=(float*)malloc(m*sizeof(float));
-        C=(float*)malloc(m*sizeof(float));
-        D=(float*)malloc(m*sizeof(float));*/
 
         float **A; //need a two dimension array to store different versin of A, so A will be A[step][i]; step is how many step will be 9 here and i will be 512 here.
         float **B;
@@ -221,16 +221,20 @@
 
         printf("this is to test EXPO should see 9 here: %d \n",EXPO);
 
-        for(int j=1;j<EXPO;j++)
+       /* for(int j=1;j<EXPO;j++)
         {
             //for each j do the work sequentially, inside this loop do work parallel.
           int powerNumber=pow(2,j-1);
           int totalNumber=m+1;
           //pass i the dynamically allocated shared memory among block.
-           CalculatePArrayKernel<<<dimGrid,dimBlock,2044*sizeof(float)>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
+           //CalculatePArrayKernel<<<dimGrid,dimBlock,2044*sizeof(float)>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
+           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
            cudaThreadSynchronize();
            printf("called from host %d \n",j);
-        }
+        }*/
+
+        CalculatePArrayKernel<<<dimGrid,dimBlock>>>(EXPO,AT,BT,CT,DT);
+        
         //copy data back to device
         cudaMemcpy(A,AT,size,cudaMemcpyDeviceToHost);
         cudaMemcpy(B,BT,size,cudaMemcpyDeviceToHost);
