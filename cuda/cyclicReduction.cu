@@ -7,7 +7,7 @@
     //this is the kernel to calculate the P=(a,b,c,d)
     //need to pass in the step which is j, and then figure out which thread to work on
     //the calculation in (2^j,2*2^j,3*2^j....)
-    __global__ void CalculatePArrayKernel(int totalStep,float** A, float** B, float** C, float** D)
+    __global__ void CalculatePArrayKernel(int totalStep,float* A, float* B, float* C, float* D)
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
       //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
@@ -17,7 +17,6 @@
       __shared__ float D_Local[511];
       for(int step=1;step<totalStep;step++)
       {
-      printf("hello from step :%d \n",step);
 
 
   /*    extern __shared__ float wholeArray[]; //dynamically allocate shared memory
@@ -32,6 +31,7 @@
       int ty=threadIdx.y;
       int BLOCKSIZE=16;
       int totalNumber=(int) pow(2.0,totalStep*1.0);
+      int columnCount=totalNumber-1;
       int powerNumber=(int) pow(2.0,step-1.0);
       
 
@@ -41,22 +41,22 @@
       {*/
         if(by!=1) //A has to be loaded in these blocks
         {
-        A_Local[temp]=A[step-1][temp];
+        A_Local[temp]=A[(step-1)*columnCount+temp];
         }
         if(by!=0)
         {
-         C_Local[temp]=C[step-1][temp];
+         C_Local[temp]=C[(step-1)*columnCount+temp];
         }
         if(by==3)
         {
-         D_Local[temp]=D[step-1][temp];
+         D_Local[temp]=D[(step-1)*columnCount+temp];
         }
         //B need to be loaded for all the block, no if should apply to that
-        B_Local[temp]=B[step-1][temp];
+        B_Local[temp]=B[(step-1)*columnCount+temp];
         __syncthreads();
 
-            if(by==0)
-            {
+        if(by==0)
+        {
             for(int i=0;i<10;i++)
             {
                 printf("cuda A: %f in step :%d \n", A_Local[i],step);
@@ -70,11 +70,11 @@
         //if for boundary check
         if(temp-powerNumber>0)
         {
-        A[step][temp]=(-1)*A_Local[temp]/(B_Local[temp-powerNumber])*A_Local[temp-powerNumber];
+        A[step*columnCount+temp]=(-1)*A_Local[temp]/(B_Local[temp-powerNumber])*A_Local[temp-powerNumber];
         }
         else
         {
-         A[step][temp]=0;
+         A[step*columnCount+temp]=0;
         }
        }
 
@@ -82,11 +82,11 @@
        {
         if(temp+powerNumber<totalNumber)
         {
-         C[step][temp]=(-1)*C_Local[temp]/B_Local[temp+powerNumber]*C_Local[temp+powerNumber];   
+         C[step*columnCount+temp]=(-1)*C_Local[temp]/B_Local[temp+powerNumber]*C_Local[temp+powerNumber];   
         }
         else
         {
-         C[step][temp]=0;
+         C[step*columnCount+temp]=0;
         }
        }
 
@@ -94,19 +94,19 @@
        {
         if(temp-powerNumber>0 && temp+powerNumber<totalNumber)
         {
-        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
+        B[step*columnCount+temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
         }
         else if(temp-powerNumber>0 && temp+powerNumber>=totalNumber)
         {
-        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber];
+        B[step*columnCount+temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber];
         }
         else if(temp-powerNumber<=0 && temp+powerNumber<totalNumber)
         {
-        B[step][temp]=B_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
+        B[step*columnCount+temp]=B_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
         }
         else
         {
-        B[step][temp]=B_Local[temp];
+        B[step*columnCount+temp]=B_Local[temp];
         }
        }
 
@@ -114,19 +114,19 @@
        { 
         if(temp-powerNumber>0 && temp+powerNumber<totalNumber)
         {
-        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
+        D[step*columnCount+temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
         }
         else if(temp-powerNumber>0 && temp+powerNumber>=totalNumber)
         {
-        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber];
+        D[step*columnCount+temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber];
         }
         else if(temp-powerNumber<=0 && temp+powerNumber<totalNumber)
         {
-        D[step][temp]=D_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
+        D[step*columnCount+temp]=D_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
         }
         else
         {
-        D[step][temp]=D_Local[temp];
+        D[step*columnCount+temp]=D_Local[temp];
         }   
        }
        __syncthreads();
@@ -141,7 +141,7 @@
         int b=1;
         int a=0;
         float delta=(b-a)*1.0/(m+1.0);
-
+/*
 
         float **A; //need a two dimension array to store different versin of A, so A will be A[step][i]; step is how many step will be 9 here and i will be 512 here.
         float **B;
@@ -173,9 +173,19 @@
         {
             D[i]=(float*)malloc(m*sizeof(float));
         }
+*/
+        float *A;
+        float *B;
+        float *C;
+        float *D;
 
+        int chunkSize=EXPO*m*sizeof(float);
+        A=malloc(chunkSize);
+        B=malloc(chunkSize);
+        C=malloc(chunkSize);
+        D=malloc(chunkSize);
        //initialize A,B,C,D
-        A[0][0]=0;
+     /*   A[0][0]=0;
         for(int i=1;i<m;i++)
         {
             A[0][i]=1-delta*delta*0.5*i;
@@ -183,20 +193,40 @@
             {
                 printf("%f \n",A[0][i]);
             }
+        }*/
+        A[0]=0;
+        //int vectorLength=EXPO*m;
+        for(int i=1;i<m;i++)
+        {
+            A[i]=1-delta*delta*0.5*i;
         }
-        for(int i=0;i<m;i++)
+       /* for(int i=0;i<m;i++)
         {
             B[0][i]=-2+delta*delta*1.0;
+        }*/
+        for(int i=0;i<m;i++)
+        {
+            B[i]=-2+delta*delta*1.0;
         }
-        C[0][m-1]=0;
+       /* C[0][m-1]=0;
         for(int i=0;i<m-1;i++)
         {
             C[0][i]=1+0.5*delta*delta*i;
+        }*/
+        C[m-1]=0;
+        for(int i=0;i<m;i++)
+        {
+            C[i]=1+0.5*delta*delta*i;
         }
-        D[0][0]=2*pow(delta,3)-(1-0.5*delta*delta);
+      /*  D[0][0]=2*pow(delta,3)-(1-0.5*delta*delta);
         for(int i=1;i<m;i++)
         {
             D[0][i]=2*(i+1)*pow(delta,3);
+        }*/
+        D[0]=0;
+        for(int i=1;i<m;i++)
+        {
+            D[i]=2*(i+1)*pow(delta,3);
         }
         clock_t begin,end;
         begin=clock();
@@ -205,8 +235,19 @@
         dim3 dimGrid(4,1); //so we have 4 blocks each block will in charge a,b,c,d respectly.
         dim3 dimBlock(16,16);
 
+        //http://stackoverflow.com/questions/5029920/how-to-use-2d-arrays-in-cuda
+        //according to the above post, the following is the correct way to allocate 2D array on cuda devixe
+
+        float *deviceA, *deviceB, *deviceC, *deviceD;
+        size_t pitch;
+        cudaMallocPitch((void**)&deviceA,&pitch,m*sizeof(float),EXPO);
+        cudaMallocPitch((void**)&deviceB,&pitch,m*sizeof(float),EXPO);
+        cudaMallocPitch((void**)&deviceC,&pitch,m*sizeof(float),EXPO);
+        cudaMallocPitch((void**)&deviceD,&pitch,m*sizeof(float),EXPO);
+
+
         //m is the size
-        float ** AT,**BT,**CT,**DT;
+ /*       float ** AT,**BT,**CT,**DT;
         int size=m*sizeof(float*);
 
         cudaMalloc((void**)&AT,size);
@@ -214,12 +255,19 @@
         cudaMalloc((void**)&CT,size);
         cudaMalloc((void**)&DT,size);
 
+       
+        for(int i=0;i<EXPO;i++)
+        {
+            //D[i]=(float*)malloc(m*sizeof(float));
+            cudaMalloc((void**)&AT[i],)
+        }
+        
         cudaMemcpy(AT,A,size,cudaMemcpyHostToDevice);
         cudaMemcpy(BT,B,size,cudaMemcpyHostToDevice);
         cudaMemcpy(CT,C,size,cudaMemcpyHostToDevice);
         cudaMemcpy(DT,D,size,cudaMemcpyHostToDevice);
 
-        printf("this is to test EXPO should see 9 here: %d \n",EXPO);
+        printf("this is to test EXPO should see 9 here: %d \n",EXPO);*/
 
        /* for(int j=1;j<EXPO;j++)
         {
@@ -233,13 +281,19 @@
            printf("called from host %d \n",j);
         }*/
 
-        CalculatePArrayKernel<<<dimGrid,dimBlock>>>(EXPO,AT,BT,CT,DT);
+        /*CalculatePArrayKernel<<<dimGrid,dimBlock>>>(EXPO,AT,BT,CT,DT);*/
         
         //copy data back to device
-        cudaMemcpy(A,AT,size,cudaMemcpyDeviceToHost);
+        /*cudaMemcpy(A,AT,size,cudaMemcpyDeviceToHost);
         cudaMemcpy(B,BT,size,cudaMemcpyDeviceToHost);
         cudaMemcpy(C,CT,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(D,DT,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(D,DT,size,cudaMemcpyDeviceToHost);*/
+        int size=EXPO*m*sizeof(float);
+        cudaMemcpy(deviceA,A,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(deviceB,B,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(deviceC,C,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(deviceD,D,size,cudaMemcpyDeviceToHost);
+        //deviceA, deviceB, deviceC, deviceD is designed to be the global memory of cuda.
     
         double time_spent;
 
@@ -250,16 +304,21 @@
 
         for(int k=0;k<100;k++)
         {
-         printf("A new 1: %f \n",A[1][k]);
-          printf("A new 8: %f \n",A[8][k]);
+         printf("A new 1: %f \n",A[m+k);
+          printf("A new 8: %f \n",A[8*m+k);
         }
         
-        cudaFree(AT);
-        cudaFree(BT);
-        cudaFree(CT);
-        cudaFree(DT);
+        cudaFree(deviceA);
+        cudaFree(deviceB);
+        cudaFree(deviceC);
+        cudaFree(deviceD);
+
+        free(A);
+        free(B);
+        free(C);
+        free(D);
       //release memory
-        for(int i=0;i<9;i++)
+    /*    for(int i=0;i<9;i++)
         {
             free(A[i]);
         }
@@ -281,7 +340,7 @@
         {
             free(D[i]);
         }
-        free(D);
+        free(D);*/
 
         return 0;
     }
