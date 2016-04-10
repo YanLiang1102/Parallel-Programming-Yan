@@ -1,44 +1,51 @@
     #include <stdio.h>
     #include <cuda.h>
     #include <time.h>
-    #define EXPO 9
+    #define EXPO 3
    
+    //the right way to add in cuda driver if you have an gpu
+    //http://askubuntu.com/questions/451221/ubuntu-14-04-install-nvidia-driver
+
 
     //this is the kernel to calculate the P=(a,b,c,d)
     //need to pass in the step which is j, and then figure out which thread to work on
     //the calculation in (2^j,2*2^j,3*2^j....)
-    __global__ void CalculatePArrayKernel(int totalStep,float* A, float* B, float* C, float* D)
+    __global__ void CalculatePArrayKernel(int totalStep,size_t pitch,float* A, float* B, float* C, float* D)
     {
-      //maybe have some way to enhance this, since some block don't need to load C and D
-      //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
-      __shared__ float A_Local[511];
-      __shared__ float B_Local[511];
-      __shared__ float C_Local[511];
-      __shared__ float D_Local[511];
+      
+      __shared__ float A_Local[7];
+      __shared__ float B_Local[7];
+      __shared__ float C_Local[7];
+      __shared__ float D_Local[7];
+
       for(int step=1;step<totalStep;step++)
       {
-
-
-  /*    extern __shared__ float wholeArray[]; //dynamically allocate shared memory
-      float* A_Local=(float*)&wholeArray[511];
-      float* B_Local=(float*)&wholeArray[1022];
-      float* C_Local=(float*)&wholeArray[1533];
-      float* D_Local=(float*)&wholeArray[2044];*/
-
+      //this is a good graph to show how does cuda grid index working
+      //http://stackoverflow.com/questions/26913683/different-way-to-index-threads-in-cuda-c
       int bx=blockIdx.x;
       int by=blockIdx.y;
       int tx=threadIdx.x;
       int ty=threadIdx.y;
-      int BLOCKSIZE=16;
+      //int BLOCKSIZE=16;
+      int BLOCKSIZE=3;
+
+    /*   if(tx==0&&ty==0)
+        {  printf("step: %d has been called from : \%d! \n",step,by);
+            
+        }*/
+      
       int totalNumber=(int) pow(2.0,totalStep*1.0);
       int columnCount=totalNumber-1;
       int powerNumber=(int) pow(2.0,step-1.0);
+      int stopLoading=(int) (pow(2.0,totalStep*1.0)-pow(2.0,(step-1)*1.0));
+      //according to the formula the stopLoading will stop load at 2^n-2^step, that is how we get this.
       
 
       int temp=ty*BLOCKSIZE+tx;
-      //need to notice threadId in different block should be the same
-     /* for(int i=0;i<511;i++)
-      {*/
+      int expoStep=(int)pow(2.0,(step-1)*1.0);
+
+    if((temp<=stopLoading)&&(temp%(expoStep))==0)
+    {
         if(by!=1) //A has to be loaded in these blocks
         {
         A_Local[temp]=A[(step-1)*columnCount+temp];
@@ -55,20 +62,21 @@
         B_Local[temp]=B[(step-1)*columnCount+temp];
         __syncthreads();
 
-        if(by==0)
+        //test A_Local
+        if(by==2&&tx==0&&ty==0&&step==2)
         {
-            for(int i=0;i<10;i++)
+            printf("I should run only once for A_Local %d! \n",columnCount);
+            for(int i=0;i<=stopLoading;i++)
             {
-                printf("cuda A: %f in step :%d \n", A_Local[i],step);
-        
+                printf("A local %f \n",A_Local[i]);
             }
-        }
 
+        }
 
        if(by==0)//means this is the first block ,As will be calculated here
        {
-        //if for boundary check
-        if(temp-powerNumber>0)
+
+       if(temp-powerNumber>0)
         {
         A[step*columnCount+temp]=(-1)*A_Local[temp]/(B_Local[temp-powerNumber])*A_Local[temp-powerNumber];
         }
@@ -76,6 +84,7 @@
         {
          A[step*columnCount+temp]=0;
         }
+        
        }
 
        if(by==2) //means this is the third block, Cs will be calculated here
@@ -129,6 +138,7 @@
         D[step*columnCount+temp]=D_Local[temp];
         }   
        }
+   }
        __syncthreads();
      }
       //}
@@ -141,88 +151,40 @@
         int b=1;
         int a=0;
         float delta=(b-a)*1.0/(m+1.0);
-/*
 
-        float **A; //need a two dimension array to store different versin of A, so A will be A[step][i]; step is how many step will be 9 here and i will be 512 here.
-        float **B;
-        float **C;
-        float **D;
-       //each version j loop through 1 to n-1 and also the initial value so we need to 
-        //remember EXPO of them
-        //we need to remember them in order to use them later in back substitution
-
-
-        A=(float**)malloc(EXPO*sizeof(float*));
-        B=(float**)malloc(EXPO*sizeof(float*));
-        C=(float**)malloc(EXPO*sizeof(float*));
-        D=(float**)malloc(EXPO*sizeof(float*));
-
-        for(int i=0;i<EXPO;i++)
-        {
-            A[i]=(float*)malloc(m*sizeof(float));
-        }
-         for(int i=0;i<EXPO;i++)
-        {
-            B[i]=(float*)malloc(m*sizeof(float));
-        }
-        for(int i=0;i<EXPO;i++)
-        {
-            C[i]=(float*)malloc(m*sizeof(float));
-        }
-        for(int i=0;i<EXPO;i++)
-        {
-            D[i]=(float*)malloc(m*sizeof(float));
-        }
-*/
         float *A;
         float *B;
         float *C;
         float *D;
 
         int chunkSize=EXPO*m*sizeof(float);
-        A=malloc(chunkSize);
-        B=malloc(chunkSize);
-        C=malloc(chunkSize);
-        D=malloc(chunkSize);
-       //initialize A,B,C,D
-     /*   A[0][0]=0;
-        for(int i=1;i<m;i++)
-        {
-            A[0][i]=1-delta*delta*0.5*i;
-            if(i<10)
-            {
-                printf("%f \n",A[0][i]);
-            }
-        }*/
+        A=(float*)malloc(chunkSize);
+        B=(float*)malloc(chunkSize);
+        C=(float*)malloc(chunkSize);
+        D=(float*)malloc(chunkSize);
+
         A[0]=0;
         //int vectorLength=EXPO*m;
-        for(int i=1;i<m;i++)
+        for(int i=1;i<=m;i++)
         {
             A[i]=1-delta*delta*0.5*i;
+              if(i<=7)
+            {
+                printf("%f \n",A[i]);
+            }
         }
-       /* for(int i=0;i<m;i++)
-        {
-            B[0][i]=-2+delta*delta*1.0;
-        }*/
+
         for(int i=0;i<m;i++)
         {
             B[i]=-2+delta*delta*1.0;
         }
-       /* C[0][m-1]=0;
-        for(int i=0;i<m-1;i++)
-        {
-            C[0][i]=1+0.5*delta*delta*i;
-        }*/
+
         C[m-1]=0;
         for(int i=0;i<m;i++)
         {
             C[i]=1+0.5*delta*delta*i;
         }
-      /*  D[0][0]=2*pow(delta,3)-(1-0.5*delta*delta);
-        for(int i=1;i<m;i++)
-        {
-            D[0][i]=2*(i+1)*pow(delta,3);
-        }*/
+
         D[0]=0;
         for(int i=1;i<m;i++)
         {
@@ -232,8 +194,8 @@
         begin=clock();
         //so need to set up different grid dimension for different value of j,
         //when j decrease the size of the thread using will decrease.
-        dim3 dimGrid(4,1); //so we have 4 blocks each block will in charge a,b,c,d respectly.
-        dim3 dimBlock(16,16);
+        dim3 dimGrid(1,4); //so we have 4 blocks each block will in charge a,b,c,d respectly.
+        dim3 dimBlock(3,3);
 
         //http://stackoverflow.com/questions/5029920/how-to-use-2d-arrays-in-cuda
         //according to the above post, the following is the correct way to allocate 2D array on cuda devixe
@@ -246,54 +208,18 @@
         cudaMallocPitch((void**)&deviceD,&pitch,m*sizeof(float),EXPO);
 
 
-        //m is the size
- /*       float ** AT,**BT,**CT,**DT;
-        int size=m*sizeof(float*);
-
-        cudaMalloc((void**)&AT,size);
-        cudaMalloc((void**)&BT,size);
-        cudaMalloc((void**)&CT,size);
-        cudaMalloc((void**)&DT,size);
-
-       
-        for(int i=0;i<EXPO;i++)
-        {
-            //D[i]=(float*)malloc(m*sizeof(float));
-            cudaMalloc((void**)&AT[i],)
-        }
-        
-        cudaMemcpy(AT,A,size,cudaMemcpyHostToDevice);
-        cudaMemcpy(BT,B,size,cudaMemcpyHostToDevice);
-        cudaMemcpy(CT,C,size,cudaMemcpyHostToDevice);
-        cudaMemcpy(DT,D,size,cudaMemcpyHostToDevice);
-
-        printf("this is to test EXPO should see 9 here: %d \n",EXPO);*/
-
-       /* for(int j=1;j<EXPO;j++)
-        {
-            //for each j do the work sequentially, inside this loop do work parallel.
-          int powerNumber=pow(2,j-1);
-          int totalNumber=m+1;
-          //pass i the dynamically allocated shared memory among block.
-           //CalculatePArrayKernel<<<dimGrid,dimBlock,2044*sizeof(float)>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
-           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
-           cudaThreadSynchronize();
-           printf("called from host %d \n",j);
-        }*/
-
-        /*CalculatePArrayKernel<<<dimGrid,dimBlock>>>(EXPO,AT,BT,CT,DT);*/
-        
-        //copy data back to device
-        /*cudaMemcpy(A,AT,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(B,BT,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(C,CT,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(D,DT,size,cudaMemcpyDeviceToHost);*/
         int size=EXPO*m*sizeof(float);
-        cudaMemcpy(deviceA,A,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(deviceB,B,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(deviceC,C,size,cudaMemcpyDeviceToHost);
-        cudaMemcpy(deviceD,D,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(deviceA,A,size,cudaMemcpyHostToDevice);
+        cudaMemcpy(deviceB,B,size,cudaMemcpyHostToDevice);
+        cudaMemcpy(deviceC,C,size,cudaMemcpyHostToDevice);
+        cudaMemcpy(deviceD,D,size,cudaMemcpyHostToDevice);
         //deviceA, deviceB, deviceC, deviceD is designed to be the global memory of cuda.
+        CalculatePArrayKernel<<<dimGrid,dimBlock>>>(EXPO,pitch,deviceA,deviceB,deviceC,deviceD);
+
+        cudaMemcpy(A,deviceA,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(B,deviceB,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(C,deviceC,size,cudaMemcpyDeviceToHost);
+        cudaMemcpy(D,deviceD,size,cudaMemcpyDeviceToHost);
     
         double time_spent;
 
@@ -301,12 +227,17 @@
         end=clock();
         time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
         printf("time spend for 524 n points is :%f seconds \n",time_spent);
-
-        for(int k=0;k<100;k++)
+/*
+        printf("hey here is the result matrix: \n");
+        for(int k=0;k<EXPO*m;k++)
         {
-         printf("A new 1: %f \n",A[m+k);
-          printf("A new 8: %f \n",A[8*m+k);
-        }
+            if(k%7==0)
+         {
+            printf("\n");
+         }
+         printf("%f ",B[k]);
+         
+        }*/
         
         cudaFree(deviceA);
         cudaFree(deviceB);
@@ -317,30 +248,6 @@
         free(B);
         free(C);
         free(D);
-      //release memory
-    /*    for(int i=0;i<9;i++)
-        {
-            free(A[i]);
-        }
-        free(A);
-
-        for(int i=0;i<9;i++)
-        {
-            free(B[i]);
-        }
-        free(B);
-
-        for(int i=0;i<9;i++)
-        {
-            free(C[i]);
-        }
-        free(C);
-
-        for(int i=0;i<9;i++)
-        {
-            free(D[i]);
-        }
-        free(D);*/
 
         return 0;
     }
