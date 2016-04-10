@@ -11,110 +11,18 @@
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
       //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
-      __shared__ float A_Local[511];
-      __shared__ float B_Local[511];
-      __shared__ float C_Local[511];
-      __shared__ float D_Local[511];
+    
 
       int bx=blockIdx.x;
       int by=blockIdx.y;
       int tx=threadIdx.x;
       int ty=threadIdx.y;
-      int BLOCKSIZE=16;
+     
       
 
       int temp=ty*BLOCKSIZE+tx;
-      //need to notice threadId in different block should be the same
-     /* for(int i=0;i<511;i++)
-      {*/
-        if(by!=1) //A has to be loaded in these blocks
-        {
-        A_Local[temp]=A[step-1][temp];
-        }
-        if(by!=0)
-        {
-         C_Local[temp]=C[step-1][temp];
-        }
-        if(by==3)
-        {
-         D_Local[temp]=D[step-1][temp];
-        }
-        //B need to be loaded for all the block, no if should apply to that
-        B_Local[temp]=B[step-1][temp];
-        __syncthreads();
-
-     
-            for(int i=0;i<1;i++)
-            {
-                printf("cuda A: %f in step :%d \n", A_Local[i],step);
-        
-            }
-
-
-       if(by==0)//means this is the first block ,As will be calculated here
-       {
-        //if for boundary check
-        if(temp-powerNumber>0)
-        {
-        A[step][temp]=(-1)*A_Local[temp]/(B_Local[temp-powerNumber])*A_Local[temp-powerNumber];
-        }
-        else
-        {
-         A[step][temp]=0;
-        }
-       }
-
-       if(by==2) //means this is the third block, Cs will be calculated here
-       {
-        if(temp+powerNumber<totalNumber)
-        {
-         C[step][temp]=(-1)*C_Local[temp]/B_Local[temp+powerNumber]*C_Local[temp+powerNumber];   
-        }
-        else
-        {
-         C[step][temp]=0;
-        }
-       }
-
-       if(by==1) //means this is the second block, Bs will be calculated here
-       {
-        if(temp-powerNumber>0 && temp+powerNumber<totalNumber)
-        {
-        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
-        }
-        else if(temp-powerNumber>0 && temp+powerNumber>=totalNumber)
-        {
-        B[step][temp]=B_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*C_Local[temp-powerNumber];
-        }
-        else if(temp-powerNumber<=0 && temp+powerNumber<totalNumber)
-        {
-        B[step][temp]=B_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*A_Local[temp+powerNumber];
-        }
-        else
-        {
-        B[step][temp]=B_Local[temp];
-        }
-       }
-
-       if(by==3) //this is the fourth block, Ds will be calculated here
-       { 
-        if(temp-powerNumber>0 && temp+powerNumber<totalNumber)
-        {
-        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
-        }
-        else if(temp-powerNumber>0 && temp+powerNumber>=totalNumber)
-        {
-        D[step][temp]=D_Local[temp]-A_Local[temp]/B_Local[temp-powerNumber]*D_Local[temp-powerNumber];
-        }
-        else if(temp-powerNumber<=0 && temp+powerNumber<totalNumber)
-        {
-        D[step][temp]=D_Local[temp]-C_Local[temp]/B_Local[temp+powerNumber]*D_Local[temp+powerNumber]; 
-        }
-        else
-        {
-        D[step][temp]=D_Local[temp];
-        }   
-       }
+       
+      printf("hello from step \n",step);
       //}
     }
 
