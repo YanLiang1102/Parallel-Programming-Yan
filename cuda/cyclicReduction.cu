@@ -11,10 +11,15 @@
     {
       //maybe have some way to enhance this, since some block don't need to load C and D
       //511 is getting from pow(2,EXPO-1)-1 and can be changed later.
-      __shared__ float A_Local[511];
+      /*__shared__ float A_Local[511];
       __shared__ float B_Local[511];
       __shared__ float C_Local[511];
-      __shared__ float D_Local[511];
+      __shared__ float D_Local[511];*/
+      extern __shared__ float wholeArray[]; //dynamically allocate shared memory
+      float* A_Local=(float*)&wholeArray[511];
+      float* B_Local=(float*)&wholeArray[1022];
+      float* C_Local=(float*)&wholeArray[1533];
+      float* D_Local=(float*)&wholeArray[2044];
 
       int bx=blockIdx.x;
       int by=blockIdx.y;
@@ -221,7 +226,9 @@
             //for each j do the work sequentially, inside this loop do work parallel.
           int powerNumber=pow(2,j-1);
           int totalNumber=m+1;
-           CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
+          //pass i the dynamically allocated shared memory among block.
+           CalculatePArrayKernel<<<dimGrid,dimBlock,2044*sizeof(float)>>>(j,powerNumber,totalNumber,AT,BT,CT,DT);
+           cudaThreadSynchronize();
            printf("called from host %d \n",j);
         }
         //copy data back to device
