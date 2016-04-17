@@ -58,7 +58,7 @@ __global__ void RecursiveDoublingKernel(int variableSize, int step,int blcokRow,
       	for(int i=0;i<step;i++)
       	{
           deviceY[i]=deviceY[i+halfSize];
-          deviceM[i+halfSize]=deviceM[i];
+          deviceM[i]=deviceM[i+halfSize];
       	}
       }
     }

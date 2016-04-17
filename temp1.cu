@@ -326,11 +326,13 @@
         cudaFree(deviceB);
         cudaFree(deviceC);
         cudaFree(deviceD);
+        cudaFree(deviceFinalX);
 
         free(A);
         free(B);
         free(C);
         free(D);
+        free(FinalX);
 
         return 0;
     }
