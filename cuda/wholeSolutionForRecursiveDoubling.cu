@@ -1,4 +1,4 @@
-   #include <stdio.h>
+  #include <stdio.h>
  #include <cuda.h>
  #include <time.h>
  #define EXPO 7
@@ -65,6 +65,73 @@ __global__ void RecursiveDoublingKernel(int variableSize, int step,int blockRow,
     }
     __syncthreads();
 }
+
+__global__ void LoopingbackRecursiveDoublingKernel(int variableSize, int step,int blockRow, int blockColumn,float* deviceY,float* deviceM,int evenOrOddFlag)
+{
+	//we weill do something like y(i+1)=my(i)+b
+	int bx=blockIdx.x;
+	int by=blockIdx.y;
+	int tx=threadIdx.x;
+	int ty=threadIdx.y;
+
+	int processIndex=tx;
+/*	printf("%d ",tx);
+
+    printf("%f,%f,%f \n",deviceY[0],deviceY[1],deviceY[2]);
+    printf("%f,%f,%f \n",deviceM[0],deviceM[1],deviceM[2]);*/
+    
+
+	//so M and Y will be divided into two part, the first part store the old value
+	//the second half part store the updated value
+
+	int halfSize=variableSize;
+	
+
+	//teh start index of the second part will be halfsize;
+    //so if evenOrOddFlag is Odd, the new value will be stored in the second half,
+    //otherwise it will be stored in the first half. 
+    //int secondhalfHelper=halfSize+step+processIndex;
+    int secondhalfHelper=halfSize+processIndex;
+
+    //printf("second half helper is: %d \n",secondhalfHelper);
+
+    //be careful that 1-step the old value still need to be copied to the current value,since the new value will start calculated at step+1
+
+    if(evenOrOddFlag%2==1)
+    {
+      deviceY[secondhalfHelper]=deviceY[processIndex]+deviceY[processIndex+step]*deviceM[processIndex];
+      deviceM[secondhalfHelper]=deviceM[processIndex]*deviceM[processIndex+step];
+
+      //now the reverse part need to copy the second part
+      //should be from index N-i to index variableSize-1
+      if(tx==0&&ty==0)
+      {
+      	for(int i=variableSize-step;i<variableSize;i++)
+      	{
+          deviceY[i+halfSize]=deviceY[i];
+          deviceM[i+halfSize]=deviceM[i];
+      	}
+      }
+    }
+    else
+    {
+       
+      deviceY[processIndex]=deviceY[halfSize+processIndex]+deviceY[halfSize+step+processIndex]*deviceM[halfSize+processIndex]; 
+      //deviceY[secondhalfHelper-halfSize]=deviceY[secondhalfHelper]+deviceM[secondhalfHelper]*deviceY[halfSize+processIndex];
+      //deviceM[secondhalfHelper-halfSize]=deviceM[secondhalfHelper]*deviceM[halfSize+processIndex];
+      deviceM[processIndex]=deviceM[processIndex+halfSize]*deviceM[processIndex+halfSize+step];
+      if(tx==0&&ty==0)
+      {
+      	for(int i=variableSize-step;i<variableSize;i++)
+      	{
+          deviceY[i]=deviceY[i+halfSize];
+          deviceM[i]=deviceM[i+halfSize];
+      	}
+      }
+    }
+    __syncthreads();
+}
+
 
 __global__ void MatrixVersionRecursiveDoubling(int variableSize, int step,int blockRow, int blockColumn,float* deviceYForW,float* deviceMForW,int evenOrOddFlag,float* deviceA, float* deviceB, float* deviceC, float* deviceD)
 {
@@ -160,7 +227,7 @@ int main()
  float *C;
  float *D;
  float *W;
-
+ float *G;
 
 	int chunkLength=m;
 	int chunkSize=chunkLength*sizeof(float);
@@ -169,6 +236,7 @@ int main()
 	C=(float*)malloc(chunkSize);
 	D=(float*)malloc(chunkSize);
 	W=(float*)malloc((m-1)*sizeof(float));
+	G=(float*)malloc((m*sizeof(float)));
 
 	 A[0]=0;
         //int vectorLength=EXPO*m;
@@ -291,60 +359,6 @@ int main()
    cudaMemcpy(MforW,deviceMforW,MforWSize,cudaMemcpyDeviceToHost);
    cudaMemcpy(YforW,deviceYforW,YforWSize,cudaMemcpyDeviceToHost);
 
-
-/*M[0]=1;
-Y[0]=1;
-
- for(int i=1;i<variableSize;i++)
- {
- 	M[i]=2;
- 	Y[i]=3;
- }
- float *deviceM, *deviceY;
- cudaMalloc((void**)&deviceM,variableSpace);
- cudaMalloc((void**)&deviceY,variableSpace);
-
- cudaMemcpy(deviceM,M,variableSpace,cudaMemcpyHostToDevice);
- cudaMemcpy(deviceY,Y,variableSpace,cudaMemcpyHostToDevice);
-
-   
-   int step=1;
-   int evenOrOddFlag=0;
-
-  do {
-  	 //each time needs N-Step processors
-  	
-  	  evenOrOddFlag=evenOrOddFlag+1;
-  	  dim3 dimGrid(1,1);
-  	  int blockRow=1;
-  	  int blockColumn=variableSize-step;
-  	  dim3 dimBlock(blockColumn,blockRow);
-  	  RecursiveDoublingKernel<<<dimGrid,dimBlock>>>(variableSize,step,blockRow,blockColumn,deviceY,deviceM,evenOrOddFlag);
-        step=step+step;
-      
-    
-   }while( step <= variableSize);
-
-   //so if evenOrOddFlag is odd, it means that the latest value will be second half,
-   //otherwise it will be in the first half
-   cudaMemcpy(M,deviceM,variableSpace,cudaMemcpyDeviceToHost);
-   cudaMemcpy(Y,deviceY,variableSpace,cudaMemcpyDeviceToHost);*/
-/*   printf("solution is here: \n");
-   if(evenOrOddFlag%2==0)
-   {
-     for(int i=0;i<variableSize;i++)
-     {
-     	printf("%f \n",Y[i]);
-     }
-   }
-   else
-   {
-   	  for(int i=0;i<variableSize;i++)
-     {
-     	printf("%f \n",Y[i+variableSize]);
-     }
-   }*/
-
       printf("The following are w value from recursvie doubling: \n");
    if(evenOrOddFlag%2==0)
    {
@@ -370,12 +384,7 @@ Y[0]=1;
      	W[i]=YforW[2*i+YforWLength]*1.0/YforW[2*i+1+YforWLength];
      	printf("%f ",W[i]);
      }
-   }
-   //need to free it here, otherwise it seems does not have enough memory to calculate the following step.
-    
-
-   
-    
+   }  
 
    //now we get the w value, next step is to get the g value
    //g will have n-1 in values.
@@ -423,12 +432,6 @@ Y[0]=1;
    cudaMemcpy(MforG,deviceMforG,forGSize,cudaMemcpyDeviceToHost);
    cudaMemcpy(YforG,deviceYforG,forGSize,cudaMemcpyDeviceToHost);
 
-
-/*   printf("\n the result for G is as following: \n");*/
-  /* for(int i=0;i<2*m;i++)
-   {
-   	printf("%f ",YforG[i]);
-   }*/
    if(evenOrOddFlagG%2==0)
    {
    	
@@ -438,6 +441,7 @@ Y[0]=1;
 		   	{
 		   		printf("\n");
 		   	}
+		 G[i]=YforG[i];
      	printf("[%d] %f ",i,YforG[i]);
      }
    }
@@ -450,9 +454,84 @@ Y[0]=1;
 	   	{
 	   		printf("\n");
 	   	}
+	   	 G[i]=YforG[i];
      	printf("[%d] %f ",i,YforG[i+m]);
      }
    }
+
+
+   //now we get G, it is time for us to reverse it back to get our final x
+  float* MforX,*YforX;
+   MforX=(float*)malloc(m*sizeof(float));
+   YforX=(float*)malloc(m*sizeof(float));
+   int forXSize=2*m*sizeof(float);
+   YforX[m-1]=G[m-1];
+   MforG[m-1]=1.0;
+/*  printf("\n test start here");*/
+	 for(int i=0;i<m-1;i++)
+	 {
+	 	YforX[i]=G[i];
+	 	MforX[i]=-1*W[i];
+	 }
+
+	 
+
+	 float *deviceMforX, *deviceYforX;
+	 cudaMalloc((void**)&deviceMforX,forXSize);
+	 cudaMalloc((void**)&deviceYforX,forXSize);
+
+
+ cudaMemcpy(deviceMforX,MforX,forXSize,cudaMemcpyHostToDevice);
+ cudaMemcpy(deviceYforX,YforX,forXSize,cudaMemcpyHostToDevice);
+
+  int stepX=1;
+  int evenOrOddFlagX=0;
+
+  do {
+  	 //each time needs N-Step processors
+  	
+  	  evenOrOddFlagX=evenOrOddFlagX+1;
+  	  dim3 dimGrid2(1,1);
+  	  int blockRow2=1;
+  	  int blockColumn2=m-stepX;
+  	  dim3 dimBlock2(blockColumn2,blockRow2);
+  	  LoopingbackRecursiveDoublingKernel<<<dimGrid2,dimBlock2>>>(m,stepX,blockRow2,blockColumn2,deviceYforX,deviceMforX,evenOrOddFlagX);
+      stepX=stepX+stepX;
+   }while( stepX<= m);
+
+   //so if evenOrOddFlag is odd, it means that the latest value will be second half,
+   //otherwise it will be in the first half
+   cudaMemcpy(MforX,deviceMforX,forXSize,cudaMemcpyDeviceToHost);
+   cudaMemcpy(YforX,deviceYforX,forXSize,cudaMemcpyDeviceToHost);
+
+   printf("The following is the result for x finally! \n");
+   if(evenOrOddFlagX%2==0)
+   {
+   	
+     for(int i=0;i<m;i++)
+     {
+		     	if(i%16==0)
+		   	{
+		   		printf("\n");
+		   	}
+     	printf(" %f ",YforX[i]);
+     }
+   }
+   else
+   {
+
+   	  for(int i=0;i<m;i++)
+     {
+	     	if(i%16==0)
+	   	{
+	   		printf("\n");
+	   	}
+     	printf("%f ",YforX[i+m]);
+     }
+   }
+
+
+
      //printf("y for G is %f \n",YforG[444]);
       double time_spent;
       end=clock();
