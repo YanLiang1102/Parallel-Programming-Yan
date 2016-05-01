@@ -1,0 +1,1072 @@
+from process: 0 local_prefix 0 accumulate_value 8 
+from process: 0 local_prefix 1 accumulate_value 9 
+from process: 0 local_prefix 2 accumulate_value 12 
+from process: 0 local_prefix 3 accumulate_value 13 
+from process: 0 local_prefix 4 accumulate_value 20 
+from process: 0 local_prefix 5 accumulate_value 29 
+from process: 0 local_prefix 6 accumulate_value 37 
+from process: 0 local_prefix 7 accumulate_value 43 
+from process: 0 local_prefix 8 accumulate_value 45 
+from process: 0 local_prefix 9 accumulate_value 54 
+from process: 0 local_prefix 10 accumulate_value 58 
+from process: 0 local_prefix 11 accumulate_value 61 
+from process: 0 local_prefix 12 accumulate_value 69 
+from process: 2 local_prefix 0 accumulate_value 9 
+from process: 2 local_prefix 1 accumulate_value 10 
+from process: 2 local_prefix 2 accumulate_value 16 
+from process: 2 local_prefix 3 accumulate_value 20 
+from process: 2 local_prefix 4 accumulate_value 28 
+from process: 2 local_prefix 5 accumulate_value 31 
+from process: 2 local_prefix 6 accumulate_value 38 
+from process: 2 local_prefix 7 accumulate_value 44 
+from process: 2 local_prefix 8 accumulate_value 45 
+from process: 2 local_prefix 9 accumulate_value 53 
+from process: 2 local_prefix 10 accumulate_value 54 
+from process: 2 local_prefix 11 accumulate_value 63 
+from process: 2 local_prefix 12 accumulate_value 71 
+from process: 2 local_prefix 13 accumulate_value 80 
+from process: 2 local_prefix 14 accumulate_value 84 
+from process: 2 local_prefix 15 accumulate_value 85 
+from process: 2 local_prefix 16 accumulate_value 85 
+from process: 2 local_prefix 17 accumulate_value 88 
+from process: 2 local_prefix 18 accumulate_value 97 
+from process: 4 local_prefix 0 accumulate_value 1 
+from process: 8 local_prefix 0 accumulate_value 5 
+from process: 8 local_prefix 1 accumulate_value 9 
+from process: 8 local_prefix 2 accumulate_value 12 
+from process: 8 local_prefix 3 accumulate_value 14 
+from process: 8 local_prefix 4 accumulate_value 18 
+from process: 8 local_prefix 5 accumulate_value 26 
+from process: 8 local_prefix 6 accumulate_value 28 
+from process: 8 local_prefix 7 accumulate_value 30 
+from process: 8 local_prefix 8 accumulate_value 38 
+from process: 8 local_prefix 9 accumulate_value 40 
+from process: 8 local_prefix 10 accumulate_value 40 
+from process: 8 local_prefix 11 accumulate_value 44 
+from process: 8 local_prefix 12 accumulate_value 50 
+from process: 8 local_prefix 13 accumulate_value 57 
+from process: 8 local_prefix 14 accumulate_value 57 
+from process: 8 local_prefix 15 accumulate_value 62 
+from process: 8 local_prefix 16 accumulate_value 70 
+from process: 8 local_prefix 17 accumulate_value 77 
+from process: 8 local_prefix 18 accumulate_value 84 
+from process: 8 local_prefix 19 accumulate_value 84 
+from process: 8 local_prefix 20 accumulate_value 87 
+from process: 8 local_prefix 21 accumulate_value 94 
+from process: 8 local_prefix 22 accumulate_value 96 
+from process: 12 local_prefix 0 accumulate_value 6 
+from process: 12 local_prefix 1 accumulate_value 13 
+from process: 12 local_prefix 2 accumulate_value 14 
+from process: 12 local_prefix 3 accumulate_value 17 
+from process: 12 local_prefix 4 accumulate_value 20 
+from process: 12 local_prefix 5 accumulate_value 27 
+from process: 12 local_prefix 6 accumulate_value 35 
+from process: 12 local_prefix 7 accumulate_value 35 
+from process: 12 local_prefix 8 accumulate_value 42 
+from process: 12 local_prefix 9 accumulate_value 42 
+from process: 12 local_prefix 10 accumulate_value 44 
+from process: 12 local_prefix 11 accumulate_value 52 
+from process: 12 local_prefix 12 accumulate_value 56 
+from process: 12 local_prefix 13 accumulate_value 57 
+from process: 12 local_prefix 14 accumulate_value 65 
+from process: 12 local_prefix 15 accumulate_value 67 
+from process: 12 local_prefix 16 accumulate_value 75 
+from process: 12 local_prefix 17 accumulate_value 78 
+from process: 12 local_prefix 18 accumulate_value 83 
+from process: 12 local_prefix 19 accumulate_value 85 
+from process: 12 local_prefix 20 accumulate_value 90 
+from process: 12 local_prefix 21 accumulate_value 99 
+from process: 12 local_prefix 22 accumulate_value 104 
+from process: 12 local_prefix 23 accumulate_value 104 
+from process: 12 local_prefix 24 accumulate_value 105 
+from process: 12 local_prefix 25 accumulate_value 109 
+from process: 12 local_prefix 26 accumulate_value 112 
+from process: 15 local_prefix 0 accumulate_value 0 
+from process: 15 local_prefix 1 accumulate_value 4 
+from process: 15 local_prefix 2 accumulate_value 10 
+from process: 15 local_prefix 3 accumulate_value 12 
+from process: 15 local_prefix 4 accumulate_value 17 
+from process: 15 local_prefix 5 accumulate_value 26 
+from process: 15 local_prefix 6 accumulate_value 28 
+from process: 15 local_prefix 7 accumulate_value 30 
+from process: 15 local_prefix 8 accumulate_value 33 
+from process: 15 local_prefix 9 accumulate_value 34 
+from process: 15 local_prefix 10 accumulate_value 40 
+from process: 15 local_prefix 11 accumulate_value 41 
+from process: 15 local_prefix 12 accumulate_value 50 
+from process: 15 local_prefix 13 accumulate_value 50 
+from process: 15 local_prefix 14 accumulate_value 59 
+from process: 15 local_prefix 15 accumulate_value 66 
+from process: 15 local_prefix 16 accumulate_value 68 
+from process: 15 local_prefix 17 accumulate_value 71 
+from process: 15 local_prefix 18 accumulate_value 79 
+from process: 15 local_prefix 19 accumulate_value 87 
+from process: 15 local_prefix 20 accumulate_value 89 
+from process: 15 local_prefix 21 accumulate_value 92 
+from process: 15 local_prefix 22 accumulate_value 93 
+from process: 15 local_prefix 23 accumulate_value 102 
+from process: 15 local_prefix 24 accumulate_value 106 
+from process: 15 local_prefix 25 accumulate_value 106 
+from process: 15 local_prefix 26 accumulate_value 114 
+from process: 15 local_prefix 27 accumulate_value 114 
+from process: 15 local_prefix 28 accumulate_value 121 
+from process: 0 local_prefix 13 accumulate_value 71 
+from process: 0 local_prefix 14 accumulate_value 72 
+from process: 0 local_prefix 15 accumulate_value 73 
+from process: 0 local_prefix 16 accumulate_value 82 
+from process: 0 local_prefix 17 accumulate_value 88 
+from process: 0 local_prefix 18 accumulate_value 91 
+from process: 0 local_prefix 19 accumulate_value 92 
+from process: 0 local_prefix 20 accumulate_value 94 
+from process: 0 local_prefix 21 accumulate_value 101 
+from process: 0 local_prefix 22 accumulate_value 101 
+from process: 0 local_prefix 23 accumulate_value 101 
+from process: 0 local_prefix 24 accumulate_value 103 
+from process: 0 local_prefix 25 accumulate_value 109 
+from process: 0 local_prefix 26 accumulate_value 117 
+from process: 0 local_prefix 27 accumulate_value 121 
+from process: 0 local_prefix 28 accumulate_value 126 
+from process: 0 local_prefix 29 accumulate_value 126 
+from process: 0 local_prefix 30 accumulate_value 131 
+from process: 0 local_prefix 31 accumulate_value 136 
+from process: 0 local_total_prefix 136 
+from process: 2 local_prefix 19 accumulate_value 104 
+from process: 2 local_prefix 20 accumulate_value 113 
+from process: 2 local_prefix 21 accumulate_value 118 
+from process: 2 local_prefix 22 accumulate_value 123 
+from process: 2 local_prefix 23 accumulate_value 124 
+from process: 2 local_prefix 24 accumulate_value 133 
+from process: 2 local_prefix 25 accumulate_value 140 
+from process: 2 local_prefix 26 accumulate_value 145 
+from process: 2 local_prefix 27 accumulate_value 145 
+from process: 2 local_prefix 28 accumulate_value 146 
+from process: 2 local_prefix 29 accumulate_value 147 
+from process: 2 local_prefix 30 accumulate_value 156 
+from process: 2 local_prefix 31 accumulate_value 156 
+from process: 2 local_total_prefix 156 
+from process: 6 local_prefix 0 accumulate_value 2 
+from process: 6 local_prefix 1 accumulate_value 11 
+from process: 6 local_prefix 2 accumulate_value 16 
+from process: 6 local_prefix 3 accumulate_value 16 
+from process: 6 local_prefix 4 accumulate_value 20 
+from process: 6 local_prefix 5 accumulate_value 23 
+from process: 6 local_prefix 6 accumulate_value 31 
+from process: 6 local_prefix 7 accumulate_value 32 
+from process: 8 local_prefix 23 accumulate_value 101 
+from process: 8 local_prefix 24 accumulate_value 107 
+from process: 8 local_prefix 25 accumulate_value 107 
+from process: 8 local_prefix 26 accumulate_value 108 
+from process: 8 local_prefix 27 accumulate_value 109 
+from process: 8 local_prefix 28 accumulate_value 116 
+from process: 8 local_prefix 29 accumulate_value 118 
+from process: 8 local_prefix 30 accumulate_value 118 
+from process: 8 local_prefix 31 accumulate_value 122 
+from process: 8 local_total_prefix 122 
+from process: 11 local_prefix 0 accumulate_value 8 
+from process: 11 local_prefix 1 accumulate_value 10 
+from process: 11 local_prefix 2 accumulate_value 12 
+from process: 11 local_prefix 3 accumulate_value 13 
+from process: 11 local_prefix 4 accumulate_value 14 
+from process: 11 local_prefix 5 accumulate_value 23 
+from process: 11 local_prefix 6 accumulate_value 30 
+from process: 11 local_prefix 7 accumulate_value 30 
+from process: 11 local_prefix 8 accumulate_value 37 
+from process: 11 local_prefix 9 accumulate_value 37 
+from process: 11 local_prefix 10 accumulate_value 38 
+from process: 11 local_prefix 11 accumulate_value 46 
+from process: 11 local_prefix 12 accumulate_value 47 
+from process: 11 local_prefix 13 accumulate_value 54 
+from process: 11 local_prefix 14 accumulate_value 57 
+from process: 11 local_prefix 15 accumulate_value 58 
+from process: 11 local_prefix 16 accumulate_value 58 
+from process: 11 local_prefix 17 accumulate_value 64 
+from process: 11 local_prefix 18 accumulate_value 70 
+from process: 11 local_prefix 19 accumulate_value 72 
+from process: 11 local_prefix 20 accumulate_value 78 
+from process: 11 local_prefix 21 accumulate_value 82 
+from process: 11 local_prefix 22 accumulate_value 90 
+from process: 11 local_prefix 23 accumulate_value 98 
+from process: 11 local_prefix 24 accumulate_value 102 
+from process: 11 local_prefix 25 accumulate_value 104 
+from process: 11 local_prefix 26 accumulate_value 109 
+from process: 11 local_prefix 27 accumulate_value 114 
+from process: 11 local_prefix 28 accumulate_value 118 
+from process: 11 local_prefix 29 accumulate_value 118 
+from process: 11 local_prefix 30 accumulate_value 122 
+from process: 11 local_prefix 31 accumulate_value 124 
+from process: 11 local_total_prefix 124 
+from process: 12 local_prefix 27 accumulate_value 119 
+from process: 12 local_prefix 28 accumulate_value 119 
+from process: 12 local_prefix 29 accumulate_value 127 
+from process: 12 local_prefix 30 accumulate_value 130 
+from process: 12 local_prefix 31 accumulate_value 136 
+from process: 12 local_total_prefix 136 
+from process: 15 local_prefix 29 accumulate_value 126 
+from process: 15 local_prefix 30 accumulate_value 133 
+from process: 15 local_prefix 31 accumulate_value 141 
+from process: 15 local_total_prefix 141 
+from process: 6 local_prefix 8 accumulate_value 34 
+from process: 6 local_prefix 9 accumulate_value 38 
+from process: 6 local_prefix 10 accumulate_value 44 
+from process: 6 local_prefix 11 accumulate_value 48 
+from process: 6 local_prefix 12 accumulate_value 56 
+from process: 6 local_prefix 13 accumulate_value 59 
+from process: 6 local_prefix 14 accumulate_value 66 
+from process: 6 local_prefix 15 accumulate_value 66 
+from process: 6 local_prefix 16 accumulate_value 73 
+from process: 6 local_prefix 17 accumulate_value 76 
+from process: 6 local_prefix 18 accumulate_value 80 
+from process: 6 local_prefix 19 accumulate_value 83 
+from process: 6 local_prefix 20 accumulate_value 90 
+from process: 6 local_prefix 21 accumulate_value 95 
+from process: 6 local_prefix 22 accumulate_value 99 
+from process: 6 local_prefix 23 accumulate_value 101 
+from process: 6 local_prefix 24 accumulate_value 104 
+from process: 6 local_prefix 25 accumulate_value 104 
+from process: 6 local_prefix 26 accumulate_value 110 
+from process: 6 local_prefix 27 accumulate_value 116 
+from process: 6 local_prefix 28 accumulate_value 121 
+from process: 6 local_prefix 29 accumulate_value 124 
+from process: 6 local_prefix 30 accumulate_value 129 
+from process: 6 local_prefix 31 accumulate_value 136 
+from process: 6 local_total_prefix 136 
+from process: 4 local_prefix 1 accumulate_value 3 
+from process: 4 local_prefix 2 accumulate_value 10 
+from process: 4 local_prefix 3 accumulate_value 11 
+from process: 4 local_prefix 4 accumulate_value 17 
+from process: 4 local_prefix 5 accumulate_value 24 
+from process: 4 local_prefix 6 accumulate_value 25 
+from process: 4 local_prefix 7 accumulate_value 32 
+from process: 4 local_prefix 8 accumulate_value 37 
+from process: 4 local_prefix 9 accumulate_value 38 
+from process: 4 local_prefix 10 accumulate_value 44 
+from process: 4 local_prefix 11 accumulate_value 51 
+from process: 4 local_prefix 12 accumulate_value 57 
+from process: 4 local_prefix 13 accumulate_value 58 
+from process: 4 local_prefix 14 accumulate_value 63 
+from process: 4 local_prefix 15 accumulate_value 72 
+from process: 4 local_prefix 16 accumulate_value 79 
+from process: 4 local_prefix 17 accumulate_value 81 
+from process: 4 local_prefix 18 accumulate_value 87 
+from process: 4 local_prefix 19 accumulate_value 87 
+from process: 4 local_prefix 20 accumulate_value 94 
+from process: 4 local_prefix 21 accumulate_value 100 
+from process: 1 local_prefix 0 accumulate_value 2 
+from process: 4 local_prefix 22 accumulate_value 100 
+from process: 4 local_prefix 23 accumulate_value 109 
+from process: 4 local_prefix 24 accumulate_value 110 
+from process: 4 local_prefix 25 accumulate_value 110 
+from process: 4 local_prefix 26 accumulate_value 110 
+from process: 4 local_prefix 27 accumulate_value 117 
+from process: 4 local_prefix 28 accumulate_value 121 
+from process: 4 local_prefix 29 accumulate_value 123 
+from process: 4 local_prefix 30 accumulate_value 124 
+from process: 4 local_prefix 31 accumulate_value 129 
+from process: 4 local_total_prefix 129 
+from process: 7 local_prefix 0 accumulate_value 4 
+from process: 7 local_prefix 1 accumulate_value 11 
+from process: 7 local_prefix 2 accumulate_value 11 
+from process: 7 local_prefix 3 accumulate_value 13 
+from process: 7 local_prefix 4 accumulate_value 15 
+from process: 7 local_prefix 5 accumulate_value 15 
+from process: 7 local_prefix 6 accumulate_value 23 
+from process: 7 local_prefix 7 accumulate_value 25 
+from process: 7 local_prefix 8 accumulate_value 31 
+from process: 7 local_prefix 9 accumulate_value 31 
+from process: 7 local_prefix 10 accumulate_value 37 
+from process: 7 local_prefix 11 accumulate_value 45 
+from process: 7 local_prefix 12 accumulate_value 51 
+from process: 7 local_prefix 13 accumulate_value 53 
+from process: 7 local_prefix 14 accumulate_value 58 
+from process: 7 local_prefix 15 accumulate_value 61 
+from process: 7 local_prefix 16 accumulate_value 61 
+from process: 7 local_prefix 17 accumulate_value 63 
+from process: 7 local_prefix 18 accumulate_value 66 
+from process: 7 local_prefix 19 accumulate_value 69 
+from process: 7 local_prefix 20 accumulate_value 74 
+from process: 7 local_prefix 21 accumulate_value 76 
+from process: 7 local_prefix 22 accumulate_value 77 
+from process: 7 local_prefix 23 accumulate_value 84 
+from process: 7 local_prefix 24 accumulate_value 86 
+from process: 7 local_prefix 25 accumulate_value 93 
+from process: 7 local_prefix 26 accumulate_value 99 
+from process: 13 local_prefix 0 accumulate_value 5 
+from process: 13 local_prefix 1 accumulate_value 7 
+from process: 13 local_prefix 2 accumulate_value 10 
+from process: 13 local_prefix 3 accumulate_value 16 
+from process: 13 local_prefix 4 accumulate_value 18 
+from process: 7 local_prefix 27 accumulate_value 106 
+from process: 7 local_prefix 28 accumulate_value 112 
+from process: 7 local_prefix 29 accumulate_value 118 
+from process: 7 local_prefix 30 accumulate_value 123 
+from process: 7 local_prefix 31 accumulate_value 125 
+from process: 7 local_total_prefix 125 
+from process: 13 local_prefix 5 accumulate_value 21 
+from process: 13 local_prefix 6 accumulate_value 27 
+from process: 13 local_prefix 7 accumulate_value 30 
+from process: 13 local_prefix 8 accumulate_value 32 
+from process: 13 local_prefix 9 accumulate_value 38 
+from process: 13 local_prefix 10 accumulate_value 43 
+from process: 13 local_prefix 11 accumulate_value 49 
+from process: 13 local_prefix 12 accumulate_value 54 
+from process: 13 local_prefix 13 accumulate_value 57 
+from process: 13 local_prefix 14 accumulate_value 58 
+from process: 13 local_prefix 15 accumulate_value 59 
+from process: 13 local_prefix 16 accumulate_value 66 
+from process: 13 local_prefix 17 accumulate_value 69 
+from process: 13 local_prefix 18 accumulate_value 73 
+from process: 13 local_prefix 19 accumulate_value 78 
+from process: 13 local_prefix 20 accumulate_value 78 
+from process: 13 local_prefix 21 accumulate_value 85 
+from process: 13 local_prefix 22 accumulate_value 92 
+from process: 13 local_prefix 23 accumulate_value 92 
+from process: 13 local_prefix 24 accumulate_value 96 
+from process: 13 local_prefix 25 accumulate_value 100 
+from process: 13 local_prefix 26 accumulate_value 106 
+from process: 13 local_prefix 27 accumulate_value 113 
+from process: 13 local_prefix 28 accumulate_value 113 
+from process: 13 local_prefix 29 accumulate_value 114 
+from process: 13 local_prefix 30 accumulate_value 115 
+from process: 13 local_prefix 31 accumulate_value 121 
+from process: 13 local_total_prefix 121 
+from process: 1 local_prefix 1 accumulate_value 4 
+from process: 1 local_prefix 2 accumulate_value 11 
+from process: 1 local_prefix 3 accumulate_value 13 
+from process: 1 local_prefix 4 accumulate_value 19 
+from process: 1 local_prefix 5 accumulate_value 24 
+from process: 1 local_prefix 6 accumulate_value 25 
+from process: 1 local_prefix 7 accumulate_value 32 
+from process: 1 local_prefix 8 accumulate_value 38 
+from process: 1 local_prefix 9 accumulate_value 41 
+from process: 1 local_prefix 10 accumulate_value 49 
+from process: 1 local_prefix 11 accumulate_value 49 
+from process: 1 local_prefix 12 accumulate_value 57 
+from process: 1 local_prefix 13 accumulate_value 62 
+from process: 1 local_prefix 14 accumulate_value 68 
+from process: 1 local_prefix 15 accumulate_value 71 
+from process: 1 local_prefix 16 accumulate_value 75 
+from process: 1 local_prefix 17 accumulate_value 80 
+from process: 1 local_prefix 18 accumulate_value 87 
+from process: 1 local_prefix 19 accumulate_value 87 
+from process: 1 local_prefix 20 accumulate_value 90 
+from process: 1 local_prefix 21 accumulate_value 98 
+from process: 1 local_prefix 22 accumulate_value 102 
+from process: 1 local_prefix 23 accumulate_value 103 
+from process: 1 local_prefix 24 accumulate_value 111 
+from process: 1 local_prefix 25 accumulate_value 116 
+from process: 1 local_prefix 26 accumulate_value 123 
+from process: 1 local_prefix 27 accumulate_value 124 
+from process: 1 local_prefix 28 accumulate_value 133 
+from process: 1 local_prefix 29 accumulate_value 133 
+from process: 1 local_prefix 30 accumulate_value 134 
+from process: 1 local_prefix 31 accumulate_value 137 
+from process: 1 local_total_prefix 137 
+from process: 14 local_prefix 0 accumulate_value 3 
+from process: 14 local_prefix 1 accumulate_value 9 
+from process: 14 local_prefix 2 accumulate_value 15 
+from process: 14 local_prefix 3 accumulate_value 15 
+from process: 14 local_prefix 4 accumulate_value 17 
+from process: 14 local_prefix 5 accumulate_value 26 
+from process: 14 local_prefix 6 accumulate_value 26 
+from process: 14 local_prefix 7 accumulate_value 30 
+from process: 14 local_prefix 8 accumulate_value 34 
+from process: 14 local_prefix 9 accumulate_value 43 
+from process: 14 local_prefix 10 accumulate_value 46 
+from process: 14 local_prefix 11 accumulate_value 49 
+from process: 14 local_prefix 12 accumulate_value 58 
+from process: 14 local_prefix 13 accumulate_value 67 
+from process: 14 local_prefix 14 accumulate_value 76 
+from process: 14 local_prefix 15 accumulate_value 82 
+from process: 14 local_prefix 16 accumulate_value 91 
+from process: 14 local_prefix 17 accumulate_value 94 
+from process: 14 local_prefix 18 accumulate_value 103 
+from process: 14 local_prefix 19 accumulate_value 108 
+from process: 14 local_prefix 20 accumulate_value 116 
+from process: 14 local_prefix 21 accumulate_value 125 
+from process: 14 local_prefix 22 accumulate_value 134 
+from process: 14 local_prefix 23 accumulate_value 141 
+from process: 14 local_prefix 24 accumulate_value 146 
+from process: 14 local_prefix 25 accumulate_value 147 
+from process: 14 local_prefix 26 accumulate_value 156 
+from process: 14 local_prefix 27 accumulate_value 160 
+from process: 14 local_prefix 28 accumulate_value 166 
+from process: 14 local_prefix 29 accumulate_value 173 
+from process: 14 local_prefix 30 accumulate_value 182 
+from process: 14 local_prefix 31 accumulate_value 191 
+from process: 14 local_total_prefix 191 
+from process: 3 local_prefix 0 accumulate_value 8 
+from process: 3 local_prefix 1 accumulate_value 14 
+from process: 3 local_prefix 2 accumulate_value 15 
+from process: 3 local_prefix 3 accumulate_value 15 
+from process: 3 local_prefix 4 accumulate_value 17 
+from process: 3 local_prefix 5 accumulate_value 20 
+from process: 3 local_prefix 6 accumulate_value 20 
+from process: 3 local_prefix 7 accumulate_value 23 
+from process: 3 local_prefix 8 accumulate_value 31 
+from process: 3 local_prefix 9 accumulate_value 38 
+from process: 3 local_prefix 10 accumulate_value 44 
+from process: 3 local_prefix 11 accumulate_value 49 
+from process: 3 local_prefix 12 accumulate_value 58 
+from process: 3 local_prefix 13 accumulate_value 62 
+from process: 3 local_prefix 14 accumulate_value 65 
+from process: 3 local_prefix 15 accumulate_value 66 
+from process: 3 local_prefix 16 accumulate_value 75 
+from process: 3 local_prefix 17 accumulate_value 78 
+from process: 3 local_prefix 18 accumulate_value 78 
+from process: 3 local_prefix 19 accumulate_value 81 
+from process: 3 local_prefix 20 accumulate_value 89 
+from process: 3 local_prefix 21 accumulate_value 94 
+from process: 3 local_prefix 22 accumulate_value 100 
+from process: 3 local_prefix 23 accumulate_value 100 
+from process: 3 local_prefix 24 accumulate_value 108 
+from process: 3 local_prefix 25 accumulate_value 117 
+from process: 3 local_prefix 26 accumulate_value 125 
+from process: 3 local_prefix 27 accumulate_value 126 
+from process: 3 local_prefix 28 accumulate_value 129 
+from process: 3 local_prefix 29 accumulate_value 130 
+from process: 3 local_prefix 30 accumulate_value 130 
+from process: 3 local_prefix 31 accumulate_value 131 
+from process: 3 local_total_prefix 131 
+from process: 10 local_prefix 0 accumulate_value 0 
+from process: 10 local_prefix 1 accumulate_value 9 
+from process: 10 local_prefix 2 accumulate_value 16 
+from process: 10 local_prefix 3 accumulate_value 25 
+from process: 10 local_prefix 4 accumulate_value 28 
+from process: 10 local_prefix 5 accumulate_value 30 
+from process: 10 local_prefix 6 accumulate_value 35 
+from process: 10 local_prefix 7 accumulate_value 43 
+from process: 10 local_prefix 8 accumulate_value 44 
+from process: 10 local_prefix 9 accumulate_value 48 
+from process: 10 local_prefix 10 accumulate_value 49 
+from process: 10 local_prefix 11 accumulate_value 51 
+from process: 10 local_prefix 12 accumulate_value 51 
+from process: 10 local_prefix 13 accumulate_value 53 
+from process: 10 local_prefix 14 accumulate_value 57 
+from process: 10 local_prefix 15 accumulate_value 65 
+from process: 10 local_prefix 16 accumulate_value 65 
+from process: 10 local_prefix 17 accumulate_value 65 
+from process: 10 local_prefix 18 accumulate_value 67 
+from process: 10 local_prefix 19 accumulate_value 74 
+from process: 10 local_prefix 20 accumulate_value 80 
+from process: 10 local_prefix 21 accumulate_value 88 
+from process: 10 local_prefix 22 accumulate_value 96 
+from process: 10 local_prefix 23 accumulate_value 101 
+from process: 10 local_prefix 24 accumulate_value 105 
+from process: 10 local_prefix 25 accumulate_value 109 
+from process: 10 local_prefix 26 accumulate_value 113 
+from process: 10 local_prefix 27 accumulate_value 114 
+from process: 10 local_prefix 28 accumulate_value 114 
+from process: 10 local_prefix 29 accumulate_value 121 
+from process: 10 local_prefix 30 accumulate_value 126 
+from process: 10 local_prefix 31 accumulate_value 126 
+from process: 10 local_total_prefix 126 
+from process: 5 local_prefix 0 accumulate_value 6 
+from process: 5 local_prefix 1 accumulate_value 15 
+from process: 5 local_prefix 2 accumulate_value 17 
+from process: 5 local_prefix 3 accumulate_value 19 
+from process: 5 local_prefix 4 accumulate_value 20 
+from process: 5 local_prefix 5 accumulate_value 28 
+from process: 5 local_prefix 6 accumulate_value 36 
+from process: 5 local_prefix 7 accumulate_value 43 
+from process: 5 local_prefix 8 accumulate_value 47 
+from process: 5 local_prefix 9 accumulate_value 53 
+from process: 5 local_prefix 10 accumulate_value 58 
+from process: 5 local_prefix 11 accumulate_value 66 
+from process: 5 local_prefix 12 accumulate_value 68 
+from process: 5 local_prefix 13 accumulate_value 75 
+from process: 5 local_prefix 14 accumulate_value 84 
+from process: 5 local_prefix 15 accumulate_value 86 
+from process: 5 local_prefix 16 accumulate_value 91 
+from process: 5 local_prefix 17 accumulate_value 96 
+from process: 5 local_prefix 18 accumulate_value 104 
+from process: 5 local_prefix 19 accumulate_value 106 
+from process: 5 local_prefix 20 accumulate_value 107 
+from process: 5 local_prefix 21 accumulate_value 108 
+from process: 5 local_prefix 22 accumulate_value 111 
+from process: 5 local_prefix 23 accumulate_value 114 
+from process: 5 local_prefix 24 accumulate_value 115 
+from process: 5 local_prefix 25 accumulate_value 122 
+from process: 5 local_prefix 26 accumulate_value 127 
+from process: 5 local_prefix 27 accumulate_value 134 
+from process: 5 local_prefix 28 accumulate_value 135 
+from process: 5 local_prefix 29 accumulate_value 140 
+from process: 5 local_prefix 30 accumulate_value 148 
+from process: 5 local_prefix 31 accumulate_value 156 
+from process: 5 local_total_prefix 156 
+from process: 9 local_prefix 0 accumulate_value 8 
+from process: 9 local_prefix 1 accumulate_value 17 
+from process: 9 local_prefix 2 accumulate_value 26 
+from process: 9 local_prefix 3 accumulate_value 27 
+from process: 9 local_prefix 4 accumulate_value 28 
+from process: 9 local_prefix 5 accumulate_value 29 
+from process: 9 local_prefix 6 accumulate_value 35 
+from process: 9 local_prefix 7 accumulate_value 40 
+from process: 9 local_prefix 8 accumulate_value 44 
+from process: 9 local_prefix 9 accumulate_value 52 
+from process: 9 local_prefix 10 accumulate_value 56 
+from process: 9 local_prefix 11 accumulate_value 60 
+from process: 9 local_prefix 12 accumulate_value 65 
+from process: 9 local_prefix 13 accumulate_value 69 
+from process: 9 local_prefix 14 accumulate_value 78 
+from process: 9 local_prefix 15 accumulate_value 87 
+from process: 9 local_prefix 16 accumulate_value 93 
+from process: 9 local_prefix 17 accumulate_value 95 
+from process: 9 local_prefix 18 accumulate_value 97 
+from process: 9 local_prefix 19 accumulate_value 100 
+from process: 9 local_prefix 20 accumulate_value 103 
+from process: 9 local_prefix 21 accumulate_value 108 
+from process: 9 local_prefix 22 accumulate_value 110 
+from process: 9 local_prefix 23 accumulate_value 111 
+from process: 9 local_prefix 24 accumulate_value 115 
+from process: 9 local_prefix 25 accumulate_value 115 
+from process: 9 local_prefix 26 accumulate_value 115 
+from process: 9 local_prefix 27 accumulate_value 122 
+from process: 9 local_prefix 28 accumulate_value 130 
+from process: 9 local_prefix 29 accumulate_value 135 
+from process: 9 local_prefix 30 accumulate_value 140 
+from process: 9 local_prefix 31 accumulate_value 146 
+from process: 9 local_total_prefix 146 
+process 0: global_prefix_sum = 0 
+process 2: global_prefix_sum = 273 
+following are process local value plus previous prefix value: 
+process 2, local_step: 1, local+prefix_value: 282 
+process 2, local_step: 2, local+prefix_value: 283 
+process 2, local_step: 3, local+prefix_value: 289 
+process 2, local_step: 4, local+prefix_value: 293 
+process 2, local_step: 5, local+prefix_value: 301 
+process 2, local_step: 6, local+prefix_value: 304 
+process 2, local_step: 7, local+prefix_value: 311 
+process 2, local_step: 8, local+prefix_value: 317 
+process 2, local_step: 9, local+prefix_value: 318 
+process 2, local_step: 10, local+prefix_value: 326 
+process 2, local_step: 11, local+prefix_value: 327 
+process 4: global_prefix_sum = 560 
+following are process local value plus previous prefix value: 
+process 4, local_step: 1, local+prefix_value: 561 
+process 4, local_step: 2, local+prefix_value: 563 
+process 4, local_step: 3, local+prefix_value: 570 
+process 4, local_step: 4, local+prefix_value: 571 
+process 4, local_step: 5, local+prefix_value: 577 
+process 4, local_step: 6, local+prefix_value: 584 
+process 4, local_step: 7, local+prefix_value: 585 
+process 4, local_step: 8, local+prefix_value: 592 
+process 4, local_step: 9, local+prefix_value: 597 
+process 4, local_step: 10, local+prefix_value: 598 
+process 4, local_step: 11, local+prefix_value: 604 
+process 4, local_step: 12, local+prefix_value: 611 
+process 4, local_step: 13, local+prefix_value: 617 
+process 4, local_step: 14, local+prefix_value: 618 
+process 4, local_step: 15, local+prefix_value: 623 
+process 4, local_step: 16, local+prefix_value: 632 
+process 4, local_step: 17, local+prefix_value: 639 
+process 6: global_prefix_sum = 845 
+following are process local value plus previous prefix value: 
+process 6, local_step: 1, local+prefix_value: 847 
+process 6, local_step: 2, local+prefix_value: 856 
+process 6, local_step: 3, local+prefix_value: 861 
+process 6, local_step: 4, local+prefix_value: 861 
+process 6, local_step: 5, local+prefix_value: 865 
+process 6, local_step: 6, local+prefix_value: 868 
+process 6, local_step: 7, local+prefix_value: 876 
+process 6, local_step: 8, local+prefix_value: 877 
+process 6, local_step: 9, local+prefix_value: 879 
+process 6, local_step: 10, local+prefix_value: 883 
+process 6, local_step: 11, local+prefix_value: 889 
+process 6, local_step: 12, local+prefix_value: 893 
+process 6, local_step: 13, local+prefix_value: 901 
+process 6, local_step: 14, local+prefix_value: 904 
+process 6, local_step: 15, local+prefix_value: 911 
+process 6, local_step: 16, local+prefix_value: 911 
+process 8: global_prefix_sum = 1106 
+following are process local value plus previous prefix value: 
+process 8, local_step: 1, local+prefix_value: 1111 
+process 8, local_step: 2, local+prefix_value: 1115 
+process 8, local_step: 3, local+prefix_value: 1118 
+process 8, local_step: 4, local+prefix_value: 1120 
+process 8, local_step: 5, local+prefix_value: 1124 
+process 8, local_step: 6, local+prefix_value: 1132 
+process 8, local_step: 7, local+prefix_value: 1134 
+process 8, local_step: 8, local+prefix_value: 1136 
+process 8, local_step: 9, local+prefix_value: 1144 
+process 8, local_step: 10, local+prefix_value: 1146 
+process 8, local_step: 11, local+prefix_value: 1146 
+process 8, local_step: 12, local+prefix_value: 1150 
+process 8, local_step: 13, local+prefix_value: 1156 
+process 8, local_step: 14, local+prefix_value: 1163 
+process 8, local_step: 15, local+prefix_value: 1163 
+process 8, local_step: 16, local+prefix_value: 1168 
+process 8, local_step: 17, local+prefix_value: 1176 
+process 8, local_step: 18, local+prefix_value: 1183 
+process 8, local_step: 19, local+prefix_value: 1190 
+process 8, local_step: 20, local+prefix_value: 1190 
+process 10: global_prefix_sum = 1374 
+following are process local value plus previous prefix value: 
+process 10, local_step: 1, local+prefix_value: 1374 
+process 10, local_step: 2, local+prefix_value: 1383 
+process 10, local_step: 3, local+prefix_value: 1390 
+process 10, local_step: 4, local+prefix_value: 1399 
+process 10, local_step: 5, local+prefix_value: 1402 
+process 10, local_step: 6, local+prefix_value: 1404 
+process 10, local_step: 7, local+prefix_value: 1409 
+process 10, local_step: 8, local+prefix_value: 1417 
+process 10, local_step: 9, local+prefix_value: 1418 
+process 10, local_step: 10, local+prefix_value: 1422 
+process 10, local_step: 11, local+prefix_value: 1423 
+process 10, local_step: 12, local+prefix_value: 1425 
+process 10, local_step: 13, local+prefix_value: 1425 
+process 10, local_step: 14, local+prefix_value: 1427 
+process 10, local_step: 15, local+prefix_value: 1431 
+process 10, local_step: 16, local+prefix_value: 1439 
+process 10, local_step: 17, local+prefix_value: 1439 
+process 10, local_step: 18, local+prefix_value: 1439 
+process 10, local_step: 19, local+prefix_value: 1441 
+process 10, local_step: 20, local+prefix_value: 1448 
+process 10, local_step: 21, local+prefix_value: 1454 
+process 10, local_step: 22, local+prefix_value: 1462 
+process 10, local_step: 23, local+prefix_value: 1470 
+process 2, local_step: 12, local+prefix_value: 336 
+process 2, local_step: 13, local+prefix_value: 344 
+process 2, local_step: 14, local+prefix_value: 353 
+process 2, local_step: 15, local+prefix_value: 357 
+process 2, local_step: 16, local+prefix_value: 358 
+process 2, local_step: 17, local+prefix_value: 358 
+process 2, local_step: 18, local+prefix_value: 361 
+process 2, local_step: 19, local+prefix_value: 370 
+process 2, local_step: 20, local+prefix_value: 377 
+process 2, local_step: 21, local+prefix_value: 386 
+process 2, local_step: 22, local+prefix_value: 391 
+process 2, local_step: 23, local+prefix_value: 396 
+process 2, local_step: 24, local+prefix_value: 397 
+process 2, local_step: 25, local+prefix_value: 406 
+process 2, local_step: 26, local+prefix_value: 413 
+process 2, local_step: 27, local+prefix_value: 418 
+process 2, local_step: 28, local+prefix_value: 418 
+process 2, local_step: 29, local+prefix_value: 419 
+process 2, local_step: 30, local+prefix_value: 420 
+process 2, local_step: 31, local+prefix_value: 429 
+process 4, local_step: 18, local+prefix_value: 641 
+process 4, local_step: 19, local+prefix_value: 647 
+process 4, local_step: 20, local+prefix_value: 647 
+process 4, local_step: 21, local+prefix_value: 654 
+process 4, local_step: 22, local+prefix_value: 660 
+process 4, local_step: 23, local+prefix_value: 660 
+process 4, local_step: 24, local+prefix_value: 669 
+process 4, local_step: 25, local+prefix_value: 670 
+process 4, local_step: 26, local+prefix_value: 670 
+process 4, local_step: 27, local+prefix_value: 670 
+process 4, local_step: 28, local+prefix_value: 677 
+process 4, local_step: 29, local+prefix_value: 681 
+process 4, local_step: 30, local+prefix_value: 683 
+process 4, local_step: 31, local+prefix_value: 684 
+process 4, local_step: 32, local+prefix_value: 689 
+process 6, local_step: 17, local+prefix_value: 918 
+process 6, local_step: 18, local+prefix_value: 921 
+process 6, local_step: 19, local+prefix_value: 925 
+process 6, local_step: 20, local+prefix_value: 928 
+process 6, local_step: 21, local+prefix_value: 935 
+process 6, local_step: 22, local+prefix_value: 940 
+process 6, local_step: 23, local+prefix_value: 944 
+process 6, local_step: 24, local+prefix_value: 946 
+process 6, local_step: 25, local+prefix_value: 949 
+process 6, local_step: 26, local+prefix_value: 949 
+process 6, local_step: 27, local+prefix_value: 955 
+process 6, local_step: 28, local+prefix_value: 961 
+process 6, local_step: 29, local+prefix_value: 966 
+process 6, local_step: 30, local+prefix_value: 969 
+process 6, local_step: 31, local+prefix_value: 974 
+process 6, local_step: 32, local+prefix_value: 981 
+process 8, local_step: 21, local+prefix_value: 1193 
+process 8, local_step: 22, local+prefix_value: 1200 
+process 8, local_step: 23, local+prefix_value: 1202 
+process 8, local_step: 24, local+prefix_value: 1207 
+process 8, local_step: 25, local+prefix_value: 1213 
+process 8, local_step: 26, local+prefix_value: 1213 
+process 8, local_step: 27, local+prefix_value: 1214 
+process 8, local_step: 28, local+prefix_value: 1215 
+process 8, local_step: 29, local+prefix_value: 1222 
+process 8, local_step: 30, local+prefix_value: 1224 
+process 8, local_step: 31, local+prefix_value: 1224 
+process 8, local_step: 32, local+prefix_value: 1228 
+process 10, local_step: 24, local+prefix_value: 1475 
+process 10, local_step: 25, local+prefix_value: 1479 
+process 10, local_step: 26, local+prefix_value: 1483 
+process 10, local_step: 27, local+prefix_value: 1487 
+process 10, local_step: 28, local+prefix_value: 1488 
+process 10, local_step: 29, local+prefix_value: 1488 
+process 10, local_step: 30, local+prefix_value: 1495 
+process 10, local_step: 31, local+prefix_value: 1500 
+process 10, local_step: 32, local+prefix_value: 1500 
+process 2, local_step: 32, local+prefix_value: 429 
+following are process local value plus previous prefix value: 
+process 0, local_step: 1, local+prefix_value: 8 
+process 0, local_step: 2, local+prefix_value: 9 
+process 0, local_step: 3, local+prefix_value: 12 
+process 0, local_step: 4, local+prefix_value: 13 
+process 0, local_step: 5, local+prefix_value: 20 
+process 0, local_step: 6, local+prefix_value: 29 
+process 0, local_step: 7, local+prefix_value: 37 
+process 0, local_step: 8, local+prefix_value: 43 
+process 0, local_step: 9, local+prefix_value: 45 
+process 0, local_step: 10, local+prefix_value: 54 
+process 0, local_step: 11, local+prefix_value: 58 
+process 0, local_step: 12, local+prefix_value: 61 
+process 0, local_step: 13, local+prefix_value: 69 
+process 0, local_step: 14, local+prefix_value: 71 
+process 0, local_step: 15, local+prefix_value: 72 
+process 0, local_step: 16, local+prefix_value: 73 
+process 0, local_step: 17, local+prefix_value: 82 
+process 0, local_step: 18, local+prefix_value: 88 
+process 0, local_step: 19, local+prefix_value: 91 
+process 0, local_step: 20, local+prefix_value: 92 
+process 0, local_step: 21, local+prefix_value: 94 
+process 0, local_step: 22, local+prefix_value: 101 
+process 0, local_step: 23, local+prefix_value: 101 
+process 0, local_step: 24, local+prefix_value: 101 
+process 0, local_step: 25, local+prefix_value: 103 
+process 0, local_step: 26, local+prefix_value: 109 
+process 0, local_step: 27, local+prefix_value: 117 
+process 0, local_step: 28, local+prefix_value: 121 
+process 0, local_step: 29, local+prefix_value: 126 
+process 0, local_step: 30, local+prefix_value: 126 
+process 0, local_step: 31, local+prefix_value: 131 
+process 0, local_step: 32, local+prefix_value: 136 
+process 5: global_prefix_sum = 689 
+process 9: global_prefix_sum = 1228 
+following are process local value plus previous prefix value: 
+process 9, local_step: 1, local+prefix_value: 1236 
+process 9, local_step: 2, local+prefix_value: 1245 
+process 9, local_step: 3, local+prefix_value: 1254 
+process 9, local_step: 4, local+prefix_value: 1255 
+process 9, local_step: 5, local+prefix_value: 1256 
+process 9, local_step: 6, local+prefix_value: 1257 
+process 9, local_step: 7, local+prefix_value: 1263 
+process 9, local_step: 8, local+prefix_value: 1268 
+process 9, local_step: 9, local+prefix_value: 1272 
+process 9, local_step: 10, local+prefix_value: 1280 
+process 9, local_step: 11, local+prefix_value: 1284 
+process 9, local_step: 12, local+prefix_value: 1288 
+process 9, local_step: 13, local+prefix_value: 1293 
+process 9, local_step: 14, local+prefix_value: 1297 
+process 9, local_step: 15, local+prefix_value: 1306 
+process 9, local_step: 16, local+prefix_value: 1315 
+process 9, local_step: 17, local+prefix_value: 1321 
+process 9, local_step: 18, local+prefix_value: 1323 
+process 9, local_step: 19, local+prefix_value: 1325 
+process 9, local_step: 20, local+prefix_value: 1328 
+process 9, local_step: 21, local+prefix_value: 1331 
+process 9, local_step: 22, local+prefix_value: 1336 
+process 9, local_step: 23, local+prefix_value: 1338 
+process 9, local_step: 24, local+prefix_value: 1339 
+process 9, local_step: 25, local+prefix_value: 1343 
+process 9, local_step: 26, local+prefix_value: 1343 
+process 9, local_step: 27, local+prefix_value: 1343 
+process 9, local_step: 28, local+prefix_value: 1350 
+process 9, local_step: 29, local+prefix_value: 1358 
+process 9, local_step: 30, local+prefix_value: 1363 
+process 9, local_step: 31, local+prefix_value: 1368 
+process 9, local_step: 32, local+prefix_value: 1374 
+following are process local value plus previous prefix value: process 12: global_prefix_sum = 1624 
+following are process local value plus previous prefix value: 
+process 12, local_step: 1, local+prefix_value: 1630 
+process 12, local_step: 2, local+prefix_value: 1637 
+process 12, local_step: 3, local+prefix_value: 1638 
+process 12, local_step: 4, local+prefix_value: 1641 
+
+process 12, local_step: 5, local+prefix_value: 1644 
+process 12, local_step: 6, local+prefix_value: 1651 
+process 12, local_step: 7, local+prefix_value: 1659 
+process 12, local_step: 8, local+prefix_value: 1659 
+process 12, local_step: 9, local+prefix_value: 1666 
+process 5, local_step: 1, local+prefix_value: 695 
+process 12, local_step: 10, local+prefix_value: 1666 
+process 12, local_step: 11, local+prefix_value: 1668 
+process 12, local_step: 12, local+prefix_value: 1676 
+process 12, local_step: 13, local+prefix_value: 1680 
+process 12, local_step: 14, local+prefix_value: 1681 
+process 12, local_step: 15, local+prefix_value: 1689 
+process 12, local_step: 16, local+prefix_value: 1691 
+process 12, local_step: 17, local+prefix_value: 1699 
+process 12, local_step: 18, local+prefix_value: 1702 
+process 5, local_step: 2, local+prefix_value: 704 
+process 12, local_step: 19, local+prefix_value: 1707 
+process 12, local_step: 20, local+prefix_value: 1709 
+process 12, local_step: 21, local+prefix_value: 1714 
+process 12, local_step: 22, local+prefix_value: 1723 
+process 12, local_step: 23, local+prefix_value: 1728 
+process 12, local_step: 24, local+prefix_value: 1728 
+process 12, local_step: 25, local+prefix_value: 1729 
+process 12, local_step: 26, local+prefix_value: 1733 
+process 12, local_step: 27, local+prefix_value: 1736 
+process 12, local_step: 28, local+prefix_value: 1743 
+process 12, local_step: 29, local+prefix_value: 1743 
+process 12, local_step: 30, local+prefix_value: 1751 
+process 12, local_step: 31, local+prefix_value: 1754 
+process 12, local_step: 32, local+prefix_value: 1760 
+process 5, local_step: 3, local+prefix_value: 706 
+process 5, local_step: 4, local+prefix_value: 708 
+process 5, local_step: 5, local+prefix_value: 709 
+process 5, local_step: 6, local+prefix_value: 717 
+process 5, local_step: 7, local+prefix_value: 725 
+process 5, local_step: 8, local+prefix_value: 732 
+process 5, local_step: 9, local+prefix_value: 736 
+process 5, local_step: 10, local+prefix_value: 742 
+process 5, local_step: 11, local+prefix_value: 747 
+process 5, local_step: 12, local+prefix_value: 755 
+process 5, local_step: 13, local+prefix_value: 757 
+process 5, local_step: 14, local+prefix_value: 764 
+process 5, local_step: 15, local+prefix_value: 773 
+process 5, local_step: 16, local+prefix_value: 775 
+process 5, local_step: 17, local+prefix_value: 780 
+process 5, local_step: 18, local+prefix_value: 785 
+process 5, local_step: 19, local+prefix_value: 793 
+process 5, local_step: 20, local+prefix_value: 795 
+process 5, local_step: 21, local+prefix_value: 796 
+process 5, local_step: 22, local+prefix_value: 797 
+process 5, local_step: 23, local+prefix_value: 800 
+process 13: global_prefix_sum = 1760 
+process 5, local_step: 24, local+prefix_value: 803 
+process 5, local_step: 25, local+prefix_value: 804 
+process 5, local_step: 26, local+prefix_value: 811 
+process 5, local_step: 27, local+prefix_value: 816 
+process 5, local_step: 28, local+prefix_value: 823 
+process 5, local_step: 29, local+prefix_value: 824 
+process 5, local_step: 30, local+prefix_value: 829 
+process 5, local_step: 31, local+prefix_value: 837 
+process 5, local_step: 32, local+prefix_value: 845 
+following are process local value plus previous prefix value: 
+process 13, local_step: 1, local+prefix_value: 1765 
+process 13, local_step: 2, local+prefix_value: 1767 
+process 13, local_step: 3, local+prefix_value: 1770 
+process 13, local_step: 4, local+prefix_value: 1776 
+process 13, local_step: 5, local+prefix_value: 1778 
+process 13, local_step: 6, local+prefix_value: 1781 
+process 13, local_step: 7, local+prefix_value: 1787 
+process 13, local_step: 8, local+prefix_value: 1790 
+process 13, local_step: 9, local+prefix_value: 1792 
+process 13, local_step: 10, local+prefix_value: 1798 
+process 13, local_step: 11, local+prefix_value: 1803 
+process 13, local_step: 12, local+prefix_value: 1809 
+process 13, local_step: 13, local+prefix_value: 1814 
+process 13, local_step: 14, local+prefix_value: 1817 
+process 13, local_step: 15, local+prefix_value: 1818 
+process 13, local_step: 16, local+prefix_value: 1819 
+process 13, local_step: 17, local+prefix_value: 1826 
+process 13, local_step: 18, local+prefix_value: 1829 
+process 13, local_step: 19, local+prefix_value: 1833 
+process 13, local_step: 20, local+prefix_value: 1838 
+process 13, local_step: 21, local+prefix_value: 1838 
+process 13, local_step: 22, local+prefix_value: 1845 
+process 13, local_step: 23, local+prefix_value: 1852 
+process 13, local_step: 24, local+prefix_value: 1852 
+process 13, local_step: 25, local+prefix_value: 1856 
+process 13, local_step: 26, local+prefix_value: 1860 
+process 13, local_step: 27, local+prefix_value: 1866 
+process 13, local_step: 28, local+prefix_value: 1873 
+process 13, local_step: 29, local+prefix_value: 1873 
+process 13, local_step: 30, local+prefix_value: 1874 
+process 13, local_step: 31, local+prefix_value: 1875 
+process 13, local_step: 32, local+prefix_value: 1881 
+process 14: global_prefix_sum = 1881 
+following are process local value plus previous prefix value: 
+process 14, local_step: 1, local+prefix_value: 1884 
+process 14, local_step: 2, local+prefix_value: 1890 
+process 14, local_step: 3, local+prefix_value: 1896 
+process 14, local_step: 4, local+prefix_value: 1896 
+process 14, local_step: 5, local+prefix_value: 1898 
+process 14, local_step: 6, local+prefix_value: 1907 
+process 14, local_step: 7, local+prefix_value: 1907 
+process 14, local_step: 8, local+prefix_value: 1911 
+process 14, local_step: 9, local+prefix_value: 1915 
+process 14, local_step: 10, local+prefix_value: 1924 
+process 14, local_step: 11, local+prefix_value: 1927 
+process 14, local_step: 12, local+prefix_value: 1930 
+process 14, local_step: 13, local+prefix_value: 1939 
+process 14, local_step: 14, local+prefix_value: 1948 
+process 14, local_step: 15, local+prefix_value: 1957 
+process 14, local_step: 16, local+prefix_value: 1963 
+process 14, local_step: 17, local+prefix_value: 1972 
+process 14, local_step: 18, local+prefix_value: 1975 
+process 14, local_step: 19, local+prefix_value: 1984 
+process 14, local_step: 20, local+prefix_value: 1989 
+process 14, local_step: 21, local+prefix_value: 1997 
+process 14, local_step: 22, local+prefix_value: 2006 
+process 14, local_step: 23, local+prefix_value: 2015 
+process 14, local_step: 24, local+prefix_value: 2022 
+process 7: global_prefix_sum = 981 
+following are process local value plus previous prefix value: 
+process 7, local_step: 1, local+prefix_value: 985 
+process 7, local_step: 2, local+prefix_value: 992 
+process 7, local_step: 3, local+prefix_value: 992 
+process 7, local_step: 4, local+prefix_value: 994 
+process 7, local_step: 5, local+prefix_value: 996 
+process 7, local_step: 6, local+prefix_value: 996 
+process 7, local_step: 7, local+prefix_value: 1004 
+process 7, local_step: 8, local+prefix_value: 1006 
+process 7, local_step: 9, local+prefix_value: 1012 
+process 7, local_step: 10, local+prefix_value: 1012 
+process 7, local_step: 11, local+prefix_value: 1018 
+process 7, local_step: 12, local+prefix_value: 1026 
+process 7, local_step: 13, local+prefix_value: 1032 
+process 7, local_step: 14, local+prefix_value: 1034 
+process 7, local_step: 15, local+prefix_value: 1039 
+process 7, local_step: 16, local+prefix_value: 1042 
+process 7, local_step: 17, local+prefix_value: 1042 
+process 7, local_step: 18, local+prefix_value: 1044 
+process 3: global_prefix_sum = 429 
+following are process local value plus previous prefix value: 
+process 3, local_step: 1, local+prefix_value: 437 
+process 3, local_step: 2, local+prefix_value: 443 
+process 3, local_step: 3, local+prefix_value: 444 
+process 3, local_step: 4, local+prefix_value: 444 
+process 3, local_step: 5, local+prefix_value: 446 
+process 3, local_step: 6, local+prefix_value: 449 
+process 3, local_step: 7, local+prefix_value: 449 
+process 7, local_step: 19, local+prefix_value: 1047 
+process 7, local_step: 20, local+prefix_value: 1050 
+process 7, local_step: 21, local+prefix_value: 1055 
+process 7, local_step: 22, local+prefix_value: 1057 
+process 7, local_step: 23, local+prefix_value: 1058 
+process 7, local_step: 24, local+prefix_value: 1065 
+process 7, local_step: 25, local+prefix_value: 1067 
+process 7, local_step: 26, local+prefix_value: 1074 
+process 7, local_step: 27, local+prefix_value: 1080 
+process 7, local_step: 28, local+prefix_value: 1087 
+process 7, local_step: 29, local+prefix_value: 1093 
+process 3, local_step: 8, local+prefix_value: 452 
+process 3, local_step: 9, local+prefix_value: 460 
+process 3, local_step: 10, local+prefix_value: 467 
+process 3, local_step: 11, local+prefix_value: 473 
+process 3, local_step: 12, local+prefix_value: 478 
+process 3, local_step: 13, local+prefix_value: 487 
+process 3, local_step: 14, local+prefix_value: 491 
+process 3, local_step: 15, local+prefix_value: 494 
+process 3, local_step: 16, local+prefix_value: 495 
+process 3, local_step: 17, local+prefix_value: 504 
+process 7, local_step: 30, local+prefix_value: 1099 
+process 7, local_step: 31, local+prefix_value: 1104 
+process 7, local_step: 32, local+prefix_value: 1106 
+process 3, local_step: 18, local+prefix_value: 507 
+process 3, local_step: 19, local+prefix_value: 507 
+process 3, local_step: 20, local+prefix_value: 510 
+process 3, local_step: 21, local+prefix_value: 518 
+process 3, local_step: 22, local+prefix_value: 523 
+process 3, local_step: 23, local+prefix_value: 529 
+process 3, local_step: 24, local+prefix_value: 529 
+process 3, local_step: 25, local+prefix_value: 537 
+process 3, local_step: 26, local+prefix_value: 546 
+process 3, local_step: 27, local+prefix_value: 554 
+process 3, local_step: 28, local+prefix_value: 555 
+process 3, local_step: 29, local+prefix_value: 558 
+process 3, local_step: 30, local+prefix_value: 559 
+process 3, local_step: 31, local+prefix_value: 559 
+process 3, local_step: 32, local+prefix_value: 560 
+process 14, local_step: 25, local+prefix_value: 2027 
+process 14, local_step: 26, local+prefix_value: 2028 
+process 14, local_step: 27, local+prefix_value: 2037 
+process 14, local_step: 28, local+prefix_value: 2041 
+process 14, local_step: 29, local+prefix_value: 2047 
+process 14, local_step: 30, local+prefix_value: 2054 
+process 14, local_step: 31, local+prefix_value: 2063 
+process 14, local_step: 32, local+prefix_value: 2072 
+process 11: global_prefix_sum = 1500 
+following are process local value plus previous prefix value: 
+process 11, local_step: 1, local+prefix_value: 1508 
+process 11, local_step: 2, local+prefix_value: 1510 
+process 11, local_step: 3, local+prefix_value: 1512 
+process 11, local_step: 4, local+prefix_value: 1513 
+process 11, local_step: 5, local+prefix_value: 1514 
+process 11, local_step: 6, local+prefix_value: 1523 
+process 15: global_prefix_sum = 2072 
+following are process local value plus previous prefix value: 
+process 15, local_step: 1, local+prefix_value: 2072 
+process 15, local_step: 2, local+prefix_value: 2076 
+process 15, local_step: 3, local+prefix_value: 2082 
+process 15, local_step: 4, local+prefix_value: 2084 
+process 15, local_step: 5, local+prefix_value: 2089 
+process 15, local_step: 6, local+prefix_value: 2098 
+process 15, local_step: 7, local+prefix_value: 2100 
+process 15, local_step: 8, local+prefix_value: 2102 
+process 15, local_step: 9, local+prefix_value: 2105 
+process 15, local_step: 10, local+prefix_value: 2106 
+process 15, local_step: 11, local+prefix_value: 2112 
+process 11, local_step: 7, local+prefix_value: 1530 
+process 11, local_step: 8, local+prefix_value: 1530 
+process 11, local_step: 9, local+prefix_value: 1537 
+process 11, local_step: 10, local+prefix_value: 1537 
+process 11, local_step: 11, local+prefix_value: 1538 
+process 11, local_step: 12, local+prefix_value: 1546 
+process 11, local_step: 13, local+prefix_value: 1547 
+process 11, local_step: 14, local+prefix_value: 1554 
+process 11, local_step: 15, local+prefix_value: 1557 
+process 11, local_step: 16, local+prefix_value: 1558 
+process 11, local_step: 17, local+prefix_value: 1558 
+process 11, local_step: 18, local+prefix_value: 1564 
+process 11, local_step: 19, local+prefix_value: 1570 
+process 11, local_step: 20, local+prefix_value: 1572 
+process 11, local_step: 21, local+prefix_value: 1578 
+process 11, local_step: 22, local+prefix_value: 1582 
+process 15, local_step: 12, local+prefix_value: 2113 
+process 15, local_step: 13, local+prefix_value: 2122 
+process 15, local_step: 14, local+prefix_value: 2122 
+process 15, local_step: 15, local+prefix_value: 2131 
+process 15, local_step: 16, local+prefix_value: 2138 
+process 15, local_step: 17, local+prefix_value: 2140 
+process 15, local_step: 18, local+prefix_value: 2143 
+process 15, local_step: 19, local+prefix_value: 2151 
+process 15, local_step: 20, local+prefix_value: 2159 
+process 15, local_step: 21, local+prefix_value: 2161 
+process 15, local_step: 22, local+prefix_value: 2164 
+process 15, local_step: 23, local+prefix_value: 2165 
+process 11, local_step: 23, local+prefix_value: 1590 
+process 11, local_step: 24, local+prefix_value: 1598 
+process 11, local_step: 25, local+prefix_value: 1602 
+process 11, local_step: 26, local+prefix_value: 1604 
+process 11, local_step: 27, local+prefix_value: 1609 
+process 11, local_step: 28, local+prefix_value: 1614 
+process 11, local_step: 29, local+prefix_value: 1618 
+process 11, local_step: 30, local+prefix_value: 1618 
+process 11, local_step: 31, local+prefix_value: 1622 
+process 11, local_step: 32, local+prefix_value: 1624 
+process 15, local_step: 24, local+prefix_value: 2174 
+process 15, local_step: 25, local+prefix_value: 2178 
+process 15, local_step: 26, local+prefix_value: 2178 
+process 15, local_step: 27, local+prefix_value: 2186 
+process 15, local_step: 28, local+prefix_value: 2186 
+process 15, local_step: 29, local+prefix_value: 2193 
+process 15, local_step: 30, local+prefix_value: 2198 
+process 15, local_step: 31, local+prefix_value: 2205 
+process 15, local_step: 32, local+prefix_value: 2213 
+process 1: global_prefix_sum = 136 
+following are process local value plus previous prefix value: 
+process 1, local_step: 1, local+prefix_value: 138 
+process 1, local_step: 2, local+prefix_value: 140 
+process 1, local_step: 3, local+prefix_value: 147 
+process 1, local_step: 4, local+prefix_value: 149 
+process 1, local_step: 5, local+prefix_value: 155 
+process 1, local_step: 6, local+prefix_value: 160 
+process 1, local_step: 7, local+prefix_value: 161 
+process 1, local_step: 8, local+prefix_value: 168 
+process 1, local_step: 9, local+prefix_value: 174 
+process 1, local_step: 10, local+prefix_value: 177 
+process 1, local_step: 11, local+prefix_value: 185 
+process 1, local_step: 12, local+prefix_value: 185 
+process 1, local_step: 13, local+prefix_value: 193 
+process 1, local_step: 14, local+prefix_value: 198 
+process 1, local_step: 15, local+prefix_value: 204 
+process 1, local_step: 16, local+prefix_value: 207 
+process 1, local_step: 17, local+prefix_value: 211 
+process 1, local_step: 18, local+prefix_value: 216 
+process 1, local_step: 19, local+prefix_value: 223 
+process 1, local_step: 20, local+prefix_value: 223 
+process 1, local_step: 21, local+prefix_value: 226 
+process 1, local_step: 22, local+prefix_value: 234 
+process 1, local_step: 23, local+prefix_value: 238 
+process 1, local_step: 24, local+prefix_value: 239 
+process 1, local_step: 25, local+prefix_value: 247 
+process 1, local_step: 26, local+prefix_value: 252 
+process 1, local_step: 27, local+prefix_value: 259 
+process 1, local_step: 28, local+prefix_value: 260 
+process 1, local_step: 29, local+prefix_value: 269 
+process 1, local_step: 30, local+prefix_value: 269 
+process 1, local_step: 31, local+prefix_value: 270 
+process 1, local_step: 32, local+prefix_value: 273 
