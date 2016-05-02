@@ -22,7 +22,7 @@ __global__ void JORkernel(double *cudaM,double *cudaX, int dim)
         int temp1=by*gridsize+bx;
         int temp2=ty*blocksize+tx;
         int j;
- 
+        int i;
 
        int ind=temp1*blocktotal+temp2;
        if(ind<dim)
@@ -34,7 +34,8 @@ __global__ void JORkernel(double *cudaM,double *cudaX, int dim)
       //this is the difference between SOR and JOR:
       double partialsum=0;
       double partialsum1=0;
-      int temparray[tempi-1];
+      double* temparray;
+      temparray= (double*)malloc((tempi-1)*sizeof(double));
       //this will be calcauted serializely
       //temparray[0] correspond to the case the i=0
         for(j=1;j<dim;j++)
@@ -63,16 +64,16 @@ __global__ void JORkernel(double *cudaM,double *cudaX, int dim)
 
      	for(j=tempi+1;j<dim;j++)
      	{
-     			sum=sum+cudaM[tempi*dim+j]*cudaX[j];
+     	 sum=sum+cudaM[tempi*dim+j]*cudaX[j];
      	}
       for(j=0;j<=tempi-1;j++)
       {
         sum=sum+cudaM[tempi*dim+j]*temparray[j];
       }
-     	  __syncthreads();
+    __syncthreads();
      cudaX[ind]=(1-GAMMA)*cudaX[ind]-GAMMA/cudaM[tempi*dim+tempi]*sum; //temp is the updated x, do the update in order to make sure the serialized step use the old value in this way.
      }
-     __synthreads();
+     __syncthreads();
      //wait for all the threads to finish, this is not going to work because it only snyc threads inside of one block.
 }
 
@@ -96,7 +97,7 @@ int main(int argc, char *argv[])
         double *x;
         double *previousx; // to install the previous x for compare purpose
         int loopCount=0; //use to see how many iteration we need to get the correct result;
-        double tolerance=0.001;
+        double tolerance=0.01;
        /* double *b;*/
         matrix=(double*) malloc(dim*dim*sizeof(double));
       /*  b=(double*) malloc(dim*sizeof(double));*/

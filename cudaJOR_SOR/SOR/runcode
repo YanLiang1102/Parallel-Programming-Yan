@@ -1,0 +1,11 @@
+#!/bin/bash
+./sor 100 >>sorresult100
+./sor 200 >>sorresult200
+./sor 300 >>sorresult300
+./sor 400 >>sorresult400
+./sor 500 >>sorresult500
+./sor 600 >>sorresult600
+./sor 700 >>sorresult700
+./sor 800 >>sorresult800
+./sor 900 >>sorresult900
+./sor 1000 >>sorresult1000
