@@ -276,6 +276,7 @@
       B=(float*)malloc(chunkSize);
       C=(float*)malloc(chunkSize);
       D=(float*)malloc(chunkSize);
+      //this is to store the final answer
       X=(float*)malloc(chunkSize);
       newB=(float*)malloc(chunkSize);
       newC=(float*)malloc(chunkSize);
@@ -327,6 +328,7 @@
         //printf("\n");
       }
    
+      //initilize x
       for(int i=0;i<m;i++)
       {
       	for(int j=0;j<m;j++)
@@ -395,8 +397,8 @@
       free(newC);
       free(newD);
 
-      cudaMemcpy(deviceB,B,chunkSize,cudaMemcpyHostToDevice);
-      cudaMemcpy(deviceC,C,chunkSize,cudaMemcpyHostToDevice);
+      /*cudaMemcpy(deviceB,B,chunkSize,cudaMemcpyHostToDevice);
+      cudaMemcpy(deviceC,C,chunkSize,cudaMemcpyHostToDevice);*/
 
       //z will D in the not block version of cyclic reduction, ZA, ZB, ZC will corresponding to A, B and C
       float *Z,*ZA,*ZB,*ZC,*FinalX;
@@ -537,12 +539,31 @@
         cudaMemcpy(FinalX,deviceFinalX,finalLengthX*sizeof(float),cudaMemcpyDeviceToHost);
       }
 
-    printf("\n final result \n");
-       for (int i=0;i<finalLengthX;i++)
+      printf("\n final result for x(2^(k-1) block which should have %d values in it:\n",m);
+       for (int i=1;i<finalLengthX-1;i++)
       {
-      
+       //this will we stored in X the 2^(k-1) the block.
+        X[(loopH-1)*m+i-1]=FinalX[i];
       	printf("%lf ",FinalX[i]);
       }
+    
+    //now need to do the block wise backsubstitution based on the formula of 5.4.2.17
+     for(int step=EXPO-1;step>=1;step--)
+     {
+      //based on formula 5.4.2.30
+     	//ok this is loop trhough the matrix in 5.4.2.17
+     	int help1=pow(2,EXPO-step);
+     	for(int backStep=1;backStep<=help1;backStep++)
+     	{
+     		//factorize B(step-1)
+     		//first and last one need to be treat specially, C[j-1] will be just identity matrix here
+     	   if(backStep==1)
+     	   {
+            
+     	   }
+     	}
+
+     }
   }
 
 
