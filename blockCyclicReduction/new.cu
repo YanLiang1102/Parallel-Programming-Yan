@@ -3,7 +3,7 @@
     #include <time.h>
     #include <math.h>
     //#include <unistd.h>
-    #define EXPO 2 //so [0,1] will be break into 2^6 intervals 64*64
+    #define EXPO 3 //so [0,1] will be break into 2^6 intervals 64*64
     #define PI 3.14159265
 
     __global__ void CalculateTheD(int step,float* deviceB, float* deviceC, float* deviceD, float* deviceX, float* devicenewB, float* devicenewC)
@@ -343,6 +343,10 @@
       {
       	D[i]=0.0;
       }
+      for(int i=0;i<dLength;i++)
+      {
+      	printf("dd %lf",D[i]);
+      }
 
       //initilize x
       for(int i=0;i<m;i++)
@@ -480,7 +484,7 @@
         		/*Z[i]=newD[(loopH-1)*m+i]*(-1.0);
         		printf("this original one being called? %lf \n",Z[i]);*/
         		Z[i]=D[((int)pow(2.0,EXPO+1.0)-3-EXPO)*m+i]*(-1.0);
-				printf("z value: %lf \n",Z[i]);
+				//printf("z value: %lf \n",Z[i]);
         	}
         	 for(int i=m;i<chunkLengthZ;i++)
 		        {
@@ -519,6 +523,7 @@
         dim3 dimBlock(blockColumn,blockRow);
           //in each step the processor being used should decrease should be 2^(n-j)-1 in jth step
         CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,blockRow,blockColumn,deviceZA,deviceZB,deviceZC,deviceZ);
+         cudaDeviceSynchronize(); //cpu will wait until cuda finish the job, this is such important function!
 
         }
 
@@ -526,7 +531,7 @@
         //copy the device vector to host
         //cudaMemcpy(ZA,deviceZA,chunkSize,cudaMemcpyDeviceToHost);
        // sleep(20);
-        cudaDeviceSynchronize(); //cpu will wait until cuda finish the job, this is such important function!
+       
         cudaMemcpy(ZB,deviceZB,zSize,cudaMemcpyDeviceToHost);
         /*for(int i=0;i<2*m;i++)
         {
@@ -551,8 +556,9 @@
         dim3  dimBlock(blockColumn,blockRow);
         
         BackwardKernel<<<dimGrid,dimBlock>>>(k,blockRow,blockColumn,deviceZA,deviceZB,deviceZC,deviceZ,deviceFinalX,initialValue);
+        cudaDeviceSynchronize();
         }
-         cudaDeviceSynchronize();
+         
 
         cudaMemcpy(FinalX,deviceFinalX,finalLengthX*sizeof(float),cudaMemcpyDeviceToHost);
       }
@@ -564,6 +570,7 @@
         X[(loopH-1)*m+i-1]=FinalX[i];
       	printf("index: %d, %lf ",(loopH-1)*m+i-1,FinalX[i]);
       }
+      printf("\n \n");
     
     //now need to do the block wise backsubstitution based on the formula of 5.4.2.17
      for(int step=EXPO-1;step>=1;step--)
@@ -600,7 +607,7 @@
 						        for(int i=0;i<m;i++)
 						        {
 						          ZB[i]=-4.0+2*cos((2.0*backStep-1.0)/(thetaHelper)*PI);
-						          //printf("zb:%f \n",ZB[i]);
+						          printf("zb:%f step: %d\n",ZB[i],step);
 						        }
 						        for(int i=m;i<chunkLengthZ;i++)
 						        {
@@ -627,8 +634,8 @@
 								        	{
 								        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 								        		//printf("this original one being called? %lf \n",Z[i]);
-								        		Z[i]=D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i];
-								        		printf("z value: %lf \n",Z[i]);
+								        		Z[i]=D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i]*(-1.0);
+								        		//printf("z value: %lf \n",Z[i]);
 
 								        	}
 								        	 for(int i=m;i<chunkLengthZ;i++)
@@ -642,7 +649,7 @@
 							        	{
 							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 							        		//printf("this original one being called? %lf \n",Z[i]);
-							        		Z[i]=D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i];
+							        		Z[i]=D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i]*(-1.0);
 
 							        	}
 							        	 for(int i=m;i<chunkLengthZ;i++)
@@ -657,7 +664,7 @@
 							        	{
 							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 							        		//printf("this original one being called? %lf \n",Z[i]);
-							        		Z[i]=D[(2*backStep-1-step+conHelp-2*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i];
+							        		Z[i]=D[(2*backStep-1-step+conHelp-4*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i]*(-1.0);
 							        	}
 							        	 for(int i=m;i<chunkLengthZ;i++)
 									        {
@@ -698,6 +705,7 @@
 						        dim3 dimBlock(blockColumn,blockRow);
 						          //in each step the processor being used should decrease should be 2^(n-j)-1 in jth step
 						        CalculatePArrayKernel<<<dimGrid,dimBlock>>>(j,blockRow,blockColumn,deviceZA,deviceZB,deviceZC,deviceZ);
+						        cudaDeviceSynchronize(); //cpu will wait until cuda finish the job, this is such important function!
 
 						        }
 
@@ -705,7 +713,7 @@
 						        //copy the device vector to host
 						        //cudaMemcpy(ZA,deviceZA,chunkSize,cudaMemcpyDeviceToHost);
 						       // sleep(20);
-						        cudaDeviceSynchronize(); //cpu will wait until cuda finish the job, this is such important function!
+						        
 						        cudaMemcpy(ZB,deviceZB,zSize,cudaMemcpyDeviceToHost);
 						     /*   for(int i=0;i<2*m;i++)
 						        {
@@ -730,25 +738,31 @@
 						        dim3  dimBlock(blockColumn,blockRow);
 						        
 						        BackwardKernel<<<dimGrid,dimBlock>>>(k,blockRow,blockColumn,deviceZA,deviceZB,deviceZC,deviceZ,deviceFinalX,initialValue);
+						          cudaDeviceSynchronize();
+						           
 						        }
-						         cudaDeviceSynchronize();
 
-						        cudaMemcpy(FinalX,deviceFinalX,finalLengthX*sizeof(float),cudaMemcpyDeviceToHost);
+                               cudaMemcpy(FinalX,deviceFinalX,finalLengthX*sizeof(float),cudaMemcpyDeviceToHost);
 
 						      }
                               printf("\n");
 						      for(int i=1;i<finalLengthX-1;i++)
 						       {
 						       	X[((2*backStep-1)*localloopH-1)*m+i-1]=FinalX[i];
-                                printf("%lf \n",FinalX[i]);
+                                //printf("%lf \n",FinalX[i]);
+                                if(backStep==1)
+                                {
+                                	printf("[%d],%lf \n",((2*backStep-1)*localloopH-1)*m+i-1,FinalX[i]);
+                                }
 						       }
+
 
      	   	//************************************************************//
      	}
 
      }
 
-    /* printf("\n");
+     printf("\n");
        for (int i=0;i<m*m;i++)
       {
        //this will we stored in X the 2^(k-1) the block.
@@ -757,7 +771,7 @@
       		printf("\n");
       	}
         printf("[%d]:%lf ",i,X[i]);
-      }*/
+      }
   }
 
 
