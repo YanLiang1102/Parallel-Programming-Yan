@@ -115,7 +115,7 @@
 		    	}
 
 		    	deviceD[(countHelper1-countHelper2/2+i-step-1)*m+row]=sumCD1+sumCD2-sumBD;
-		    	printf("in cuda index %d value %lf: \n",(countHelper1-countHelper2/2+i-step-1)*m+row,deviceD[(countHelper1-countHelper2/2+i-step-1)*m+row]);
+		    	//printf("in cuda index %d value %lf: \n",(countHelper1-countHelper2/2+i-step-1)*m+row,deviceD[(countHelper1-countHelper2/2+i-step-1)*m+row]);
 		    	//printf("gpu:%lf:",newD[(i*multiplier-1)*m+row]);
 		    }
 
@@ -256,6 +256,7 @@
       //matrix size will be 63*63 as our setup
       int m=pow(2,EXPO)-1;
       int loopH=pow(2,EXPO-1);
+      int conHelp=4*loopH;
          
 
       //syntax will follow the  routine in the book
@@ -269,6 +270,7 @@
       int b=1;
       int a=0;
       int maxBlockSize=16;
+
 
       //B and C share the same chuck length 
       int chunkLength=m*m;
@@ -417,8 +419,8 @@
       //z will D in the not block version of cyclic reduction, ZA, ZB, ZC will corresponding to A, B and C
       float *Z,*ZA,*ZB,*ZC,*FinalX;
       int finalLengthX=(int)pow(2,EXPO)+1;
-      int chunkLength1=(pow(2,EXPO)-1)*2+1;
-      int zSize=chunkLength1*sizeof(float);
+      int chunkLengthZ=(pow(2,EXPO)-1)*2+1;
+      int zSize=chunkLengthZ*sizeof(float);
       
       Z=(float*)malloc(zSize);
       ZA=(float*)malloc(zSize);
@@ -445,7 +447,7 @@
       		ZA[i]=1.0;
       	}
       	//else will be 0,since it has been seperate to half and half
-        for(int i=m;i<chunkLength;i++)
+        for(int i=m;i<chunkLengthZ;i++)
         {
           ZA[i]=0;
         }
@@ -455,7 +457,7 @@
           ZB[i]=-4.0+2*cos((2.0*j-1.0)/(m+1.0)*PI);
           //printf("zb:%f \n",ZB[i]);
         }
-        for(int i=m;i<chunkLength;i++)
+        for(int i=m;i<chunkLengthZ;i++)
         {
           ZB[i]=0;
         }
@@ -465,7 +467,7 @@
         {
             ZC[i]=1.0;
         }
-        for(int i=m;i<chunkLength;i++)
+        for(int i=m;i<chunkLengthZ;i++)
         {
           ZC[i]=0;
         }
@@ -478,9 +480,9 @@
         		/*Z[i]=newD[(loopH-1)*m+i]*(-1.0);
         		printf("this original one being called? %lf \n",Z[i]);*/
         		Z[i]=D[((int)pow(2.0,EXPO+1.0)-3-EXPO)*m+i]*(-1.0);
-        		printf("important:%lf \n",Z[i]);
+				printf("z value: %lf \n",Z[i]);
         	}
-        	 for(int i=m;i<chunkLength;i++)
+        	 for(int i=m;i<chunkLengthZ;i++)
 		        {
 		          Z[i]=0;
 		        }
@@ -491,9 +493,9 @@
         	{
              //to do this will be x
         		Z[i]=FinalX[i+1];
-        		printf("does this ever called? %lf \n",Z[i]);
+        		//printf("does this ever called? %lf \n",Z[i]);
         	}
-        	 for(int i=m;i<chunkLength;i++)
+        	 for(int i=m;i<chunkLengthZ;i++)
 		        {
 		          Z[i]=0;
 		        }
@@ -526,20 +528,20 @@
        // sleep(20);
         cudaDeviceSynchronize(); //cpu will wait until cuda finish the job, this is such important function!
         cudaMemcpy(ZB,deviceZB,zSize,cudaMemcpyDeviceToHost);
-        for(int i=0;i<2*m;i++)
+        /*for(int i=0;i<2*m;i++)
         {
         	printf("zbresult:%lf \n",ZB[i]);
-        }
+        }*/
         //cudaMemcpy(C,deviceC,chunkSize,cudaMemcpyDeviceToHost);
         cudaMemcpy(Z,deviceZ,zSize,cudaMemcpyDeviceToHost);
         int lastIndex=(int)pow(2,EXPO+1)-EXPO-3;
         float initialValue=Z[lastIndex]/ZB[lastIndex];
-        printf("initial value: %lf \n",initialValue);
+        //printf("initial value: %lf \n",initialValue);
         FinalX[0]=0;
         FinalX[(int)pow(2,EXPO-1)]=initialValue;
         //printf("the value in the middle is: %f and this suppose to close to 0.5 when n goes big! \n",FinalX[(int)pow(2,EXPO-1)]);
 
-         cudaMemcpy(deviceFinalX,FinalX,finalLengthX*sizeof(float),cudaMemcpyHostToDevice);
+        cudaMemcpy(deviceFinalX,FinalX,finalLengthX*sizeof(float),cudaMemcpyHostToDevice);
         for(int k=EXPO-1;k>=1;k--)
         {
           //so the most one will use 2^(n-k) variable will be covered!
@@ -560,7 +562,7 @@
       {
        //this will we stored in X the 2^(k-1) the block.
         X[(loopH-1)*m+i-1]=FinalX[i];
-      	printf("%lf ",FinalX[i]);
+      	printf("index: %d, %lf ",(loopH-1)*m+i-1,FinalX[i]);
       }
     
     //now need to do the block wise backsubstitution based on the formula of 5.4.2.17
@@ -571,6 +573,7 @@
      	int help1=pow(2,EXPO-step);
      	int localloopH=pow(2,step-1);
      	int thetaHelper=pow(2,step);
+     	//inside of each step, you have this much of sybmatrix to solve
      	for(int backStep=1;backStep<=help1;backStep++)
      	{
      		//factorize B(step-1)
@@ -578,6 +581,7 @@
 
      	
      	   	//************************************************************//
+     	   	                 //this is to loop through the factorization
 						     for(int j=1;j<=localloopH;j++)
 						      {
 						      	//for each j, za,zb,zc all going to be different
@@ -588,17 +592,17 @@
 						      		ZA[i]=1.0;
 						      	}
 						      	//else will be 0,since it has been seperate to half and half
-						        for(int i=m;i<chunkLength;i++)
+						        for(int i=m;i<chunkLengthZ;i++)
 						        {
 						          ZA[i]=0;
 						        }
 
 						        for(int i=0;i<m;i++)
 						        {
-						          ZB[i]=-4.0+2*cos((2.0*j-1.0)/(thetaHelper)*PI);
+						          ZB[i]=-4.0+2*cos((2.0*backStep-1.0)/(thetaHelper)*PI);
 						          //printf("zb:%f \n",ZB[i]);
 						        }
-						        for(int i=m;i<chunkLength;i++)
+						        for(int i=m;i<chunkLengthZ;i++)
 						        {
 						          ZB[i]=0;
 						        }
@@ -608,7 +612,7 @@
 						        {
 						            ZC[i]=1.0;
 						        }
-						        for(int i=m;i<chunkLength;i++)
+						        for(int i=m;i<chunkLengthZ;i++)
 						        {
 						          ZC[i]=0;
 						        }
@@ -623,18 +627,42 @@
 								        	{
 								        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 								        		//printf("this original one being called? %lf \n",Z[i]);
+								        		Z[i]=D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i];
+								        		printf("z value: %lf \n",Z[i]);
+
 								        	}
-								        	 for(int i=m;i<chunkLength;i++)
+								        	 for(int i=m;i<chunkLengthZ;i++)
 										        {
 										          Z[i]=0;
 										        }
 						        	}
 						        	else if(backStep==help1)
 						        	{
+					        				for(int i=0;i<m;i++)
+							        	{
+							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
+							        		//printf("this original one being called? %lf \n",Z[i]);
+							        		Z[i]=D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i];
+
+							        	}
+							        	 for(int i=m;i<chunkLengthZ;i++)
+									        {
+									          Z[i]=0;
+									        }
 
 						        	}
-						        	else
+						        	else //this is at the middle bakcstep
 						        	{
+						        			for(int i=0;i<m;i++)
+							        	{
+							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
+							        		//printf("this original one being called? %lf \n",Z[i]);
+							        		Z[i]=D[(2*backStep-1-step+conHelp-2*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i];
+							        	}
+							        	 for(int i=m;i<chunkLengthZ;i++)
+									        {
+									          Z[i]=0;
+									        }
 
 						        	}
 						        }
@@ -644,9 +672,9 @@
 						        	{
 						             //to do this will be x
 						        		Z[i]=FinalX[i+1];
-						        		printf("does this ever called? %lf \n",Z[i]);
+						        		//printf("does this ever called? %lf \n",Z[i]);
 						        	}
-						        	 for(int i=m;i<chunkLength;i++)
+						        	 for(int i=m;i<chunkLengthZ;i++)
 								        {
 								          Z[i]=0;
 								        }
@@ -679,20 +707,20 @@
 						       // sleep(20);
 						        cudaDeviceSynchronize(); //cpu will wait until cuda finish the job, this is such important function!
 						        cudaMemcpy(ZB,deviceZB,zSize,cudaMemcpyDeviceToHost);
-						        for(int i=0;i<2*m;i++)
+						     /*   for(int i=0;i<2*m;i++)
 						        {
 						        	printf("zbresult:%lf \n",ZB[i]);
-						        }
+						        }*/
 						        //cudaMemcpy(C,deviceC,chunkSize,cudaMemcpyDeviceToHost);
 						        cudaMemcpy(Z,deviceZ,zSize,cudaMemcpyDeviceToHost);
 						        int lastIndex=(int)pow(2,EXPO+1)-EXPO-3;
 						        float initialValue=Z[lastIndex]/ZB[lastIndex];
-						        printf("initial value: %lf \n",initialValue);
+						        //printf("initial value: %lf \n",initialValue);
 						        FinalX[0]=0;
 						        FinalX[(int)pow(2,EXPO-1)]=initialValue;
 						        //printf("the value in the middle is: %f and this suppose to close to 0.5 when n goes big! \n",FinalX[(int)pow(2,EXPO-1)]);
 
-						         cudaMemcpy(deviceFinalX,FinalX,finalLengthX*sizeof(float),cudaMemcpyHostToDevice);
+						        cudaMemcpy(deviceFinalX,FinalX,finalLengthX*sizeof(float),cudaMemcpyHostToDevice);
 						        for(int k=EXPO-1;k>=1;k--)
 						        {
 						          //so the most one will use 2^(n-k) variable will be covered!
@@ -706,28 +734,33 @@
 						         cudaDeviceSynchronize();
 
 						        cudaMemcpy(FinalX,deviceFinalX,finalLengthX*sizeof(float),cudaMemcpyDeviceToHost);
+
 						      }
+                              printf("\n");
+						      for(int i=1;i<finalLengthX-1;i++)
+						       {
+						       	X[((2*backStep-1)*localloopH-1)*m+i-1]=FinalX[i];
+                                printf("%lf \n",FinalX[i]);
+						       }
 
      	   	//************************************************************//
-            
-     	   
      	}
 
      }
+
+    /* printf("\n");
+       for (int i=0;i<m*m;i++)
+      {
+       //this will we stored in X the 2^(k-1) the block.
+      	if(m%10==0)
+      	{
+      		printf("\n");
+      	}
+        printf("[%d]:%lf ",i,X[i]);
+      }*/
   }
 
 
-
-      
-
-
-
-
-
-     
-     //now we begin with the second step, based on formula 5.4.2.30
-     // in order to solve this sequentially we need the non-block version of cyclic reduction that in previous homework and sinceH here is 63*63 so that we need 63 threads at most to solve this 
-      //in this way one block should be enough.
 
 
 
