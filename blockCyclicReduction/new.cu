@@ -1,9 +1,9 @@
-      #include <stdio.h>
+       #include <stdio.h>
     #include <cuda.h>
     #include <time.h>
     #include <math.h>
     //#include <unistd.h>
-    #define EXPO 3 //so [0,1] will be break into 2^6 intervals 64*64
+    #define EXPO 5 //so [0,1] will be break into 2^6 intervals 64*64
     #define PI 3.14159265
 
     __global__ void CalculateTheD(int step,float* deviceB, float* deviceC, float* deviceD, float* deviceX, float* devicenewB, float* devicenewC)
@@ -21,6 +21,10 @@
         
         int blocktotal=blocksize*blocksize;
         int temp1=by*gridsize+bx;
+        if(tx==1&&ty==1)
+        {
+        	printf("temp1: %d \n",temp1);
+        }
         int temp2=ty*blocksize+tx;
 
        int ind=temp1*blocktotal+temp2;
@@ -34,7 +38,7 @@
       int iloopstep=(int)pow(2.0,(EXPO-step)*1.0)-1;
       int h=(int)pow(2.0,(step-1)*1.0);
       int multiplier=(int)pow(2.0,step*1.0);
-      int countHelper1=(int)pow(2.0,EXPO+1.0);
+      int countHelper1=(int)pow(2.0,EXPO+1.0); 
       int countHelper2=(int)pow(2.0,EXPO-step+2);
 
       float* oldB;
@@ -101,7 +105,7 @@
     
 
       //use the device value as old value and store the updated one in to the new value
-      if(ind<m*m) //so only the first 63 threads do work and the other one is hanging there
+      if(row<m && column<m) //so only the first 63 threads do work and the other one is hanging there
       {
 		    float sumBB=0.0;
 		    for(int k=0;k<m;k++)
@@ -371,9 +375,9 @@
       {
        for(int j=0;j<m;j++)
        {
-       	float x=(j+1)*delta;
-       	float y=(i+1)*delta;
-       	D[i*m+j]=(2*x*x+2*y*y-2*x-2*y)*deltaSquare;
+       /*	float x=(j+1)*delta;
+       	float y=(i+1)*delta;*/
+       	D[i*m+j]=deltaSquare;  //f(x,y) will be 1 here.
        	printf("dd block: %d %lf ",i,D[i*m+j]);
        }
         printf("\n");
@@ -398,6 +402,11 @@
       }
       //printf("let test this2:\n");
 
+
+
+     //begin timing here:
+        clock_t begin,end;
+        begin=clock();
       float *deviceB,*deviceC,*deviceD,*deviceX,*devicenewB,*devicenewC;
       cudaMalloc((void**)&deviceB,chunkSize);
       cudaMalloc((void**)&deviceC,chunkSize);
@@ -417,7 +426,7 @@
         
         //int gridSize=((m+1)/maxBlockSize)*((m+1)/maxBlockSize); //gridSize for this problem will be 16
          	//dim3 dimGrid(1,gridSize)
-      	dim3 dimGrid(1,1);  //since the maximum process we are going to use will be 63*63
+      	dim3 dimGrid(1,32);  //since the maximum process we are going to use will be 63*63
 
         int blockRow=maxBlockSize;//pow(2,EXPO/2); //here will be 8 and 8
         int blockColumn=maxBlockSize;//pow(2,EXPO/2); //here will be 8 and 8
@@ -654,7 +663,7 @@
 
 						        for(int i=0;i<m;i++)
 						        {
-						          ZB[i]=-4.0+2*cos((2.0*backStep-1.0)/(thetaHelper)*PI);
+						          ZB[i]=-4.0+2*cos((2.0*j-1.0)/(thetaHelper)*PI);
 						          printf("zb:%f step: %d\n",ZB[i],step);
 						        }
 						        for(int i=m;i<chunkLengthZ;i++)
@@ -682,14 +691,7 @@
 								        	{
 								        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 								        		//printf("this original one being called? %lf \n",Z[i]);
-								        		Z[i]=D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i];
-
-                           if(step==2)
-                           {
-                            printf("ti:%d, value: %lf \n",(thetaHelper-1)*m+i,X[(thetaHelper-1)*m+i]);
-                           }
-
-								        		//printf("z value: %lf \n",Z[i]);
+								        		Z[i]=(D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i])*(-1.0);
 
 								        	}
 								        	 for(int i=m;i<chunkLengthZ;i++)
@@ -703,7 +705,7 @@
 							        	{
 							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 							        		//printf("this original one being called? %lf \n",Z[i]);
-							        		Z[i]=D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i];
+							        		Z[i]=(D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i])*(-1.0);
 
 							        	}
 							        	 for(int i=m;i<chunkLengthZ;i++)
@@ -718,7 +720,7 @@
 							        	{
 							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 							        		//printf("this original one being called? %lf \n",Z[i]);
-							        		Z[i]=D[(2*backStep-1-step+conHelp-4*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i];
+							        		Z[i]=(D[(2*backStep-1-step+conHelp-4*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i])*(-1.0);
 							        	}
 							        	 for(int i=m;i<chunkLengthZ;i++)
 									        {
@@ -820,12 +822,17 @@
        for (int i=0;i<m*m;i++)
       {
        //this will we stored in X the 2^(k-1) the block.
-      	if(m%10==0)
+      	if(m%31==0)
       	{
       		printf("\n");
       	}
         printf("[%d]:%lf ",i,X[i]);
       }
+         double time_spent;
+        end=clock();
+       time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
+     
+     printf("\n time spent to calcuate x with partition [0,1] into %d intervals:%lf seconds \n",m+1,time_spent);  
   }
 
 
