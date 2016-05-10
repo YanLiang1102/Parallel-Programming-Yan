@@ -1,4 +1,4 @@
-     #include <stdio.h>
+      #include <stdio.h>
     #include <cuda.h>
     #include <time.h>
     #include <math.h>
@@ -45,6 +45,8 @@
       float* newC;
       //float* newD;
     
+      
+
      //this is to exchange which hold the previous value which hold the current value
       if(step%2==0)
       {
@@ -66,6 +68,37 @@
         newC=devicenewC;
   /*      newD=devicenewD;*/
       }
+
+/*    
+     if(row==0&&column==0)
+      {
+           if(step==1)
+      {
+        printf("bb-0 \n");
+        for(int i=0;i<m;i++)
+        {
+          for(int j=0;j<m;j++)
+          {
+            printf("%lf ",oldB[i*m+j]);
+          }
+          printf("\n");
+        }
+      }
+
+       if(step==2)
+      {
+         printf("bb-1 \n");
+        for(int i=0;i<m;i++)
+        {
+          for(int j=0;j<m;j++)
+          {
+            printf("%lf ",oldB[i*m+j]);
+          }
+          printf("\n");
+        }
+      }
+      }*/
+    
 
       //use the device value as old value and store the updated one in to the new value
       if(ind<m*m) //so only the first 63 threads do work and the other one is hanging there
@@ -114,7 +147,14 @@
 		           sumBD=sumBD+oldB[row*m+k]*deviceD[(countHelper1-countHelper2+i*2-step)*m+k];
 		    	}
 
-		    	deviceD[(countHelper1-countHelper2/2+i-step-1)*m+row]=sumCD1+sumCD2-sumBD;
+		    	deviceD[(int)((countHelper1-countHelper2/2+i-step-1)*m)+row]=sumCD1+sumCD2-sumBD;
+
+           if(i==2&&step==1)
+           {
+            printf("row %d, index %d, %lf",row,(int)((countHelper1-countHelper2/2+i-step-1)*m)+row,deviceD[(int)((countHelper1-countHelper2/2+i-step-1)*m)+row]);
+
+           }
+          //printf("step %d,row: %d, index:%d dd1: %lf \n",step,row,(int)(countHelper1-countHelper2/2+i-step-1)*m+row,deviceD[(countHelper1-countHelper2/2+i-step-1)*m+row]);
 		    	//printf("in cuda index %d value %lf: \n",(countHelper1-countHelper2/2+i-step-1)*m+row,deviceD[(countHelper1-countHelper2/2+i-step-1)*m+row]);
 		    	//printf("gpu:%lf:",newD[(i*multiplier-1)*m+row]);
 		    }
@@ -125,7 +165,7 @@
        //sync the thread before go to the next step.
         __syncthreads();
 
-   /*     if(row==0&&column==0)
+   /*     if(row==0&&column==0)s
         {
             for(int i=0;i<9;i++)
             {
@@ -334,19 +374,19 @@
        	float x=(j+1)*delta;
        	float y=(i+1)*delta;
        	D[i*m+j]=(2*x*x+2*y*y-2*x-2*y)*deltaSquare;
-       	//printf("%lf",D[i*m+j]);
+       	printf("dd block: %d %lf ",i,D[i*m+j]);
        }
-        //printf("\n");
+        printf("\n");
       }
       //other value initilized to be 0 at the beginnig
       for(int i=m*m;i<dLength;i++)
       {
       	D[i]=0.0;
       }
-      for(int i=0;i<dLength;i++)
+     /* for(int i=0;i<dLength;i++)
       {
       	printf("dd %lf",D[i]);
-      }
+      }*/
 
       //initilize x
       for(int i=0;i<m;i++)
@@ -403,6 +443,14 @@
       	printf("%lf ",newD[3+i]);
       }*/
       //release some of the memory
+      for(int i=0;i<dLength;i++)
+      {
+        if(i%m==0)
+        {
+          printf("\n");
+        }
+        printf("dha:%lf ",D[i]);
+      }
       cudaFree(deviceB);
       cudaFree(deviceC);
       //cudaFree(deviceD);
@@ -634,7 +682,13 @@
 								        	{
 								        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 								        		//printf("this original one being called? %lf \n",Z[i]);
-								        		Z[i]=D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i]*(-1.0);
+								        		Z[i]=D[(conHelp-4*help1-step+1)*m+i]-X[(thetaHelper-1)*m+i];
+
+                           if(step==2)
+                           {
+                            printf("ti:%d, value: %lf \n",(thetaHelper-1)*m+i,X[(thetaHelper-1)*m+i]);
+                           }
+
 								        		//printf("z value: %lf \n",Z[i]);
 
 								        	}
@@ -649,7 +703,7 @@
 							        	{
 							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 							        		//printf("this original one being called? %lf \n",Z[i]);
-							        		Z[i]=D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i]*(-1.0);
+							        		Z[i]=D[(conHelp-2*help1-1-step)*m+i]-X[(conHelp/2-thetaHelper-1)*m+i];
 
 							        	}
 							        	 for(int i=m;i<chunkLengthZ;i++)
@@ -664,7 +718,7 @@
 							        	{
 							        		//Z[i]=D[(loopH-1)*m+i]*(-1.0);
 							        		//printf("this original one being called? %lf \n",Z[i]);
-							        		Z[i]=D[(2*backStep-1-step+conHelp-4*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i]*(-1.0);
+							        		Z[i]=D[(2*backStep-1-step+conHelp-4*help1)*m+i]-X[(backStep*thetaHelper-1)*m+i]-X[((backStep-1)*thetaHelper-1)*m+i];
 							        	}
 							        	 for(int i=m;i<chunkLengthZ;i++)
 									        {
@@ -752,7 +806,7 @@
                                 //printf("%lf \n",FinalX[i]);
                                 if(backStep==1)
                                 {
-                                	printf("[%d],%lf \n",((2*backStep-1)*localloopH-1)*m+i-1,FinalX[i]);
+                                	printf("test [%d],%lf \n",((2*backStep-1)*localloopH-1)*m+i-1,FinalX[i]);
                                 }
 						       }
 
