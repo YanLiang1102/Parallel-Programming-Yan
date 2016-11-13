@@ -12,15 +12,12 @@
 
 #define BUFSIZE 1024
 
-socklen_t clientlen1;
-//struct sockaddr_in server;
-
 void error(char *msg) {
   perror(msg);
   exit(1);
 }
 typedef struct {
-		int portno;
+    int portno;
     char* hostname;
     char clientname[9];
     char* neighbors[9]; //this will be the destionation of who to send.
@@ -37,11 +34,10 @@ typedef struct {
   
   pthread_exit(NULL);
  }
- 
+
  void * sender(info* myinfo) 
  {
           int sockfd, portno, n;
-          int serverlen;
           struct sockaddr_in serveraddr;
           struct hostent *server;
           char *hostname;
@@ -75,22 +71,14 @@ typedef struct {
          serveraddr.sin_family = AF_INET;
           bcopy((char *)server->h_addr, 
           (char *)&serveraddr.sin_addr.s_addr, server->h_length);
-          
-         /*       hp = gethostbyname(host);
-          if (!hp)
-          {
-            printf("%c[client]: could not obtain address of %s\n", id, host);
-            return 0;
-          }*/
+    
 
-         //memcpy((void *)&serveraddr.sin_addr, server->h_addr_list[0], server->h_length);
-        
         /* get a message from the user */
         bzero(buf, BUFSIZE);
       //loop through all the file that you are ready to send.
         int fileno=0;
         int neighborsnum=(*myinfo).neighborsnum;
-          for(fileno=0;fileno<1;fileno++)
+          for(fileno=0;fileno<9;fileno++)
           {
                    FILE* fileptr;
                    char filenamebuffer[32]; // The filename buffer.
@@ -128,17 +116,13 @@ typedef struct {
                         if(sendflag)
                        {
                            printf("the package is going to sent to destination address : %s\n",line);
-
-                           serverlen = sizeof(struct sockaddr_in);
+                           //serverlen = sizeof(serveraddr);
                            long filelen;
                           fseek(fileptr, 0, SEEK_END);          // Jump to the end of the file
                           filelen = ftell(fileptr);             // Get the current byte offset in the file
                           rewind(fileptr);                      // Jump back to the beginning of the file
                           fread(buf, filelen, 1, fileptr);
-                          
-                          //printf("this is the file length that is going to send: %d",filelen);
-
-
+                          //start from 150 add in the destinantion
                           int j=0;
                           char destno[3];
                           for(j=0;j<9;j++)
@@ -157,7 +141,7 @@ typedef struct {
                           }
                       //this 170th info also need to update each time this package get sent.
                           char tmpportno[4];
-                          sprintf(tmpportno,"%ld",portno);
+                          sprintf(tmpportno,"%d",portno);
                           for(j=0;j<4;j++)
                           {
                             buf[170+j]=tmpportno[j];
@@ -165,12 +149,6 @@ typedef struct {
                       
                           int destnoasint=atoi(destno);
                           int nexthopasint=0;
-               /*           int fi=0;
-                          for( fi=0;fi<12;fi++)
-                          {
-                            printf("routing table record: %d \n",(*myinfo).routingtable[fi]);
-                          }
-*/
                           if(destnoasint==140)
                           {
                             nexthopasint=(*myinfo).routingtable[0];
@@ -197,24 +175,17 @@ typedef struct {
                               }
                           }
 
-                          //portno=(*myinfo).neighborsport[neiindex];
-                          //portno=nexthopasint-100+5000;
-                          //portno=5059;
-                          printf("Is this the correct port? %d \n",nexthopasint-100+5000);
-                          serveraddr.sin_port = htons((unsigned short)portno);
+                          portno=(*myinfo).neighborsport[neiindex];
 
-                          
-                          n = sendto(sockfd, buf, BUFSIZE, 0, (struct sockaddr *)&serveraddr,sizeof(serveraddr));
-                           
+                          serveraddr.sin_port = htons(portno);
+
+                      
+                          n = sendto(sockfd, buf, BUFSIZE, 0, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
                           if (n < 0) 
-                              error("ERROR in sendto 1");  
-                          else{
-                            printf("successful sent!!! \n");
-                          } 
-                         // printf("this is the message send! %s size :%d \n",buf,sizeof(buf));
-
+                              error("ERROR in sendto 1");            
                      }
                      
+                    //printf("Echo from server: %d", buf);
                     fflush(stdout);  /** you need to flush the stdout **/
                     bzero(buf, BUFSIZE);
                     fclose(fileptr);
@@ -232,30 +203,26 @@ typedef struct {
 void* receiver(info* myinfo) {
   int sockfd; /* socket */
   int portno; /* port to listen on */
-
-  //socklen_t clientlen; /* byte size of client's address */
+  socklen_t clientlen; /* byte size of client's address */
   struct sockaddr_in serveraddr; /* server's addr */
   struct sockaddr_in clientaddr; /* client addr */
   struct hostent *hostp; /* client host info */
   char buf[BUFSIZE]; /* message buf */
- /* char *hostaddrp;*/ /* dotted decimal host addr string */
+  char *hostaddrp; /* dotted decimal host addr string */
   int optval; /* flag value for setsockopt */
   int n; /* message byte size */
   char clientname[9]; //here it will be the server name,clinet is just still the name of the sender.
 
-  //portno = (*myinfo).portno;
+  portno = (*myinfo).portno;
 
   int k=0;
-  char clientno[3];
+ 
   for(k=0;k<9;k++)
   {
     clientname[k]=(*myinfo).clientname[k];
-    if(k>=6)
-    {
-      clientno[k-6]=clientname[k];
-    }
   }
-  portno=atoi(clientno)-100+5000;
+
+
 
   printf("server start at fakeIp: %s \n",clientname);
   sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -278,7 +245,6 @@ void* receiver(info* myinfo) {
   serveraddr.sin_family = AF_INET;
   serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
   serveraddr.sin_port = htons((unsigned short)portno);
-  printf("port: %d  bind to server and listening.\n",portno);
 
   /* 
    * bind: associate the parent socket with a port 
@@ -290,47 +256,39 @@ void* receiver(info* myinfo) {
   /* 
    * main loop: wait for a datagram, then echo it
    */
-  clientlen1 = sizeof(struct sockaddr_in);
+  clientlen = sizeof(struct sockaddr_in);
   while (1) {
 
     /*
      * recvfrom: receive a UDP datagram from a client
      */
+
     bzero(buf, BUFSIZE);
-    printf("keep waiting ....\n");
-    /*n = recvfrom(sockfd, buf, BUFSIZE, 0,
-         (struct sockaddr *) &clientaddr,&clientlen1);*/
     n = recvfrom(sockfd, buf, BUFSIZE, 0,
-        (struct sockaddr *) &clientaddr, &clientlen1);
-    printf("this is what I received :\n %s \n",buf);
+         (struct sockaddr *) &clientaddr, &clientlen);
     if (n < 0)
-    {
       error("ERROR in recvfrom 1");
-      
-    }
     else
     {
-      printf("which means you successfully received \n \n");
-      if(buf[0]=='h')
-      {
-        printf("replied from the destination: %s \n",buf); 
-      }
+       if(buf[0]=='h')
+       {
+        printf("============================================\n");
+        printf("response from destination: %s \n",buf);
+        printf("============================================\n");
+       }
     }
-    /* 
-     * gethostbyaddr: determine who sent the datagram
-     */
-/*    hostp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr, 
+
+    hostp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr, 
               sizeof(clientaddr.sin_addr.s_addr), AF_INET);
     if (hostp == NULL)
       error("ERROR on gethostbyaddr");
     hostaddrp = inet_ntoa(clientaddr.sin_addr);
     if (hostaddrp == NULL)
-      error("ERROR on inet_ntoa\n");*/
-
+      error("ERROR on inet_ntoa\n");
 
       if(buf[0]!='h')
      {
-                printf("have you ever get here 0?");
+                //printf("have you ever reached here agian? \n");
                 char destionationchar[3];
                 int charindex=0;
                 for(charindex=0;charindex<3;charindex++)
@@ -339,9 +297,12 @@ void* receiver(info* myinfo) {
                 }
                 int destinationno=atoi(destionationchar);
 
+            /*    printf("desnoasint is : %d \n",desnoasint);
+                printf("servernoasint is :%d \n",servernoasint);*/
+
                 if(buf[157]==clientname[7]&&buf[158]==clientname[8])
                 {
-                 
+                  printf("are you here man?? \n");
                   //which means the destion address from the frame match the current server address,
                   //then the server will print what it receives, other wise just print receive message
                   //but the destionation is not me.
@@ -368,8 +329,8 @@ void* receiver(info* myinfo) {
                 //destination is not this server, send to the next hop based on the map.
                 else
                 {
-                   
                      int desnexhopno=0;
+                     //printf("are you getting here? 0 \n");
                      if(destinationno==140)
                      {
                         desnexhopno=(*myinfo).routingtable[0];
@@ -378,7 +339,7 @@ void* receiver(info* myinfo) {
                      {
                         desnexhopno=(*myinfo).routingtable[destinationno-150];
                      }
-
+                      //printf("are you getting here? 1 \n");
                      int neighindex=0;
                      for(neighindex=0;neighindex<(*myinfo).neighborsnum;neighindex++)
                      {
@@ -393,27 +354,27 @@ void* receiver(info* myinfo) {
                           break;
                         }
                      }
+                     // printf("are you getting here? 2 \n");
+                    clientaddr.sin_port = htons((*myinfo).neighborsport[neighindex]);
+                    // printf("are you getting here? 3 \n");
+                    int tmpindex=0;
+                    char tmpportno1[4];
+                    sprintf(tmpportno1,"%d",(*myinfo).portno);
+                    for(tmpindex=0;tmpindex<4;tmpindex++)
+                    {  
+                      //printf("this is the sender port: %d \n", (*myinfo).portno);
+                      buf[170+tmpindex]=tmpportno1[tmpindex];
+                    }
+                      // printf("are you getting here? 5 \n");
+                    for(tmpindex=0;tmpindex<9;tmpindex++)
+                    {
+                      buf[160+tmpindex]=clientname[tmpindex];
+                    }
+                      // printf("are you getting here? 6\n");
+                    n = sendto(sockfd, buf, strlen(buf), 0, (struct sockaddr *)&clientaddr, clientlen);
 
-                                clientaddr.sin_port = htons(atoi((*myinfo).neighborsport[neighindex]));
-                                //printf("show me which is the port you send to : %d \n",clientportno);
-                                int tmpindex=0;
-                                char tmpportno1[4];
-                                sprintf(tmpportno1,"%ld",(*myinfo).portno);
-                                for(tmpindex=0;tmpindex<4;tmpindex++)
-                                {  
-                                  //printf("this is the sender port: %d \n", (*myinfo).portno);
-                                  buf[170+tmpindex]=tmpportno1[tmpindex];
-                                }
-
-                             /*   for(tmpindex=0;tmpindex<9;tmpindex++)
-                                {
-                                  buf[160+tmpindex]=clientname[tmpindex];
-                                }*/
-                            
-                              n = sendto(sockfd, buf, BUFSIZE, 0, (struct sockaddr *)&clientaddr, sizeof(clientaddr));
-
-                              if (n < 0) 
-                                error("ERROR in sendto 1");
+                   if (n < 0) 
+                      error("ERROR in sendto 1");
                 }
         }
 
@@ -439,7 +400,6 @@ int main (int argc, char** argv)
 
     int lineno=0;
     int neighborsrank=0;
-    int currentip=0;
     while(fgets(line,sizeof line,file)!= NULL) 
     {
      
@@ -447,18 +407,12 @@ int main (int argc, char** argv)
         { 
            //i1.hostname=line;
            int tmpindex=0;
-           char currip[3];
            for(tmpindex=0;tmpindex<9;tmpindex++)
            {
-
             i1.clientname[tmpindex]=line[tmpindex];
             i2.clientname[tmpindex]=line[tmpindex];
-            if(tmpindex>=6)
-            {
-              currip[tmpindex-6]=line[tmpindex];
-            }
+            //printf("line: %c \n",line[tmpindex]);
            }
-           currentip=atoi(currip);
         }
         else if(lineno==1)
         {
@@ -496,7 +450,7 @@ int main (int argc, char** argv)
         else if(lineno>3&&lineno<=3+noofneighbors)
         {
                 int tmpindex=0;
-                char tmpip[9];
+                
             /*      char str[] = "Hello World";
              char *result = (char *)malloc(strlen(str)+1);
              strcpy(result,str);*/
@@ -540,20 +494,8 @@ int main (int argc, char** argv)
                int ipindexno=atoi(ipindex);
                int nexthopno=atoi(nexthop);
                //printf("next hop no %d \n",nexthopno);
-               if(currentip==140)
-               {
-                //-1 one means you are at the current spot.
-                  i1.routingtable[0]=-1;
-                  i2.routingtable[0]=-1;
-               }
-               else
-               {
-                 i1.routingtable[currentip-150]=-1;
-                 i2.routingtable[currentip-150]=-1;
-               }
                if(ipindexno==140)
                {
-                 //printf("have you ever reach here????? \n");
                  i1.routingtable[0]=nexthopno;
                  i2.routingtable[0]=nexthopno;
                }
@@ -580,7 +522,6 @@ int main (int argc, char** argv)
   int status;
 
   i2.hostname="localhost";
-  i1.hostname="localhost";
   //i1 is for server which is the receiver.
   status = pthread_create (&threads[0], NULL, receiver,&i1);
   //i2 is for client which is the sender.
@@ -596,4 +537,3 @@ int main (int argc, char** argv)
 
   return 0;
 } 
-
