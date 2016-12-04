@@ -697,6 +697,8 @@ void* receivertable(info* myinfo) {
 		     	buf[13]=atoi(myself)-150+'0';
 	     	 }
 	     	 buf[14]='o';
+		//change this 5 to other number might break the code, since the send and receive in the same 
+		//thread the race condition.
 	     	 sleep(5);
 	     	 for(k=0;k<(*myinfo).neighborsnum;k++)
 	          {
@@ -909,8 +911,8 @@ int main (int argc, char** argv)
   
   //i2 is for client which is the sender.
   //printf("the package will be send 15 seconds later since we need to wait to start all the server \n");
-  //sleep 1 min
-  //sleep(15);
+  //1 min
+  //(15);
   
   //status = pthread_create (&threads[2], NULL, sender,&i2);
 
