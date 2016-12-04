@@ -405,11 +405,7 @@ void* receiver(info* myinfo) {
    */
   if (bind(sockfd, (struct sockaddr *) &serveraddr, 
        sizeof(serveraddr)) < 0) 
-    printf("ERROR on binding \n");
-  else
-  {
-  	printf("succesful binding port at : %d!\n",portno);
-  }
+    error("ERROR on binding");
 
   /* 
    * main loop: wait for a datagram, then echo it
@@ -419,8 +415,8 @@ void* receiver(info* myinfo) {
 
     /*
      * recvfrom: receive a UDP datagram from a client
-     */  
-    //printf("are you getting here? \n");
+     */
+
     bzero(buf, BUFSIZE);
     n = recvfrom(sockfd, buf, BUFSIZE, 0,
          (struct sockaddr *) &clientaddr, &clientlen);
@@ -429,12 +425,11 @@ void* receiver(info* myinfo) {
     else
     {
        if(buf[0]=='h')
-        {
+       {
         printf("============================================\n");
         printf("response from destination: %s \n",buf);
         printf("============================================\n");
-        }
-    	//printf("I did received something so the port works! \n");
+       }
     }
 
     hostp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr, 
@@ -455,7 +450,6 @@ void* receiver(info* myinfo) {
                   destionationchar[charindex]=buf[156+charindex];
                 }
                 int destinationno=atoi(destionationchar);
-                printf("here is the destination sent to me: %d \n",destinationno);
 
             /*    printf("desnoasint is : %d \n",desnoasint);
                 printf("servernoasint is :%d \n",servernoasint);*/
@@ -489,26 +483,16 @@ void* receiver(info* myinfo) {
                 //destination is not this server, send to the next hop based on the map.
                 else
                 {
-                       int desnexhopno=0;
+                     int desnexhopno=0;
                      //printf("are you getting here? 0 \n");
-                    
-	                  if(destinationno==140)
-	                  {
-	                    if(routeinfo[0]==0)
-	                     desnexhopno=140;//(*myinfo).routingtable[0];
-	                    else
-	                      desnexhopno=150+routeinfo[0];
-
-	                  }
-	                  else
-	                  {
-	                    //nexthopasint=(*myinfo).routingtable[destnoasint-150];
-	                    int tempitem=routeinfo[destinationno-150];
-	                    if(tempitem==0)
-	                      desnexhopno=140;
-	                    else
-	                     desnexhopno=tempitem+150;
-	                  }
+                     if(destinationno==140)
+                     {
+                        desnexhopno=(*myinfo).routingtable[0];
+                     }
+                     else
+                     {
+                        desnexhopno=(*myinfo).routingtable[destinationno-150];
+                     }
                       //printf("are you getting here? 1 \n");
                      int neighindex=0;
                      for(neighindex=0;neighindex<(*myinfo).neighborsnum;neighindex++)
@@ -727,9 +711,8 @@ void* receivertable(info* myinfo) {
 //kill this thread no need to wait any more.
 
   sleep(30);
-  
-  serveraddr.sin_port = htons((unsigned short)portno*10);
   close(sockfd);
+
   pthread_exit(NULL);
   //start another receiver thread
  /* pthread_t threads[2]; 
